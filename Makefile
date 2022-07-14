@@ -26,7 +26,7 @@ _black:
 
 _git_commit:
 	@cd $(_path)
-	@echo "\n⚙️  making commit $(app_name)...\n"
+	@echo "\n⚙️  making commit $(_commit_name)...\n"
 	@git add .
 	-@git commit -m $(_commit_name)
 
