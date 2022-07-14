@@ -1,0 +1,21 @@
+{
+    "APP_NAME" : "weather_bot",
+    "OPENWEATHER_API_KEY" : "350e514939ff9f36632209d7d9390b04",
+    "LINES_COUNT" : 4,
+    "LINE_LENGTH" : 19,
+
+    "modules_data": [
+        {
+            "name" : "datetime_1line",
+            "rows" : [0],
+            "columns_start" : 0,
+            "columns_stop" : 19
+        },
+        {
+            "name" : "weather_2line",
+            "rows" : [2, 3],
+            "columns_start" : 0,
+            "columns_stop" : 19
+        }
+    ]
+}

@@ -1,0 +1,4 @@
+git clone https://github.com/the-raspberry-pi-guy/lcd.git
+
+ls /dev | grep i2c
+sudo i2cdetect -y 1

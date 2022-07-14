@@ -1,0 +1,2 @@
+python-crontab==2.6.0
+black==22.3.0
