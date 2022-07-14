@@ -59,20 +59,6 @@ class ScreenPatchModule:
                 row + 1,
             )
 
-        # new_text_splitted = new_text.split('\n')
-
-        # # for i in range(len(current_text_splitted)):
-        # #     current_text_splitted[i] = shift_center(
-        # #         self.current_text.split('\n')[i], self.screenpatch.line_length
-        # #     )
-
-        # for i, row in enumerate(self.screenpatch.rows):
-
-        #     self.display.lcd_display_string(
-        #         new_text_splitted[i][:self.screenpatch.line_length],
-        #         row + 1
-        #     )
-
     def get_screenpatch_text(self) -> str:
         return self.current_text
 
