@@ -4,6 +4,9 @@
     "LINES_COUNT" : 4,
     "LINE_LENGTH" : 19,
 
+    "GLOBAL_REFRASH_RATE" : 1,
+    "PRINT_SCREEN_IMAGE_TO_CONSOLE" : false,
+
     "modules_data": [
         {
             "name" : "datetime_1line",

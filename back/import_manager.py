@@ -2,11 +2,10 @@ import asyncio
 from datetime import datetime
 from importlib import import_module
 
-from back.lcd.drivers import Lcd
 from back.print_manager import mprint
 
 
-def import_modules(modules_list):
+def import_modules(modules_list: list) -> list:
     """
     import all "main.py" files
     by template <SCRIPT_PATH>/modules/module_1/main.py
@@ -23,7 +22,7 @@ def import_modules(modules_list):
     return imported_modules
 
 
-def setup_modules(CONFIG, imported_modules, screenpatch_collection: list):
+def setup_modules(CONFIG: dict, imported_modules: list, screenpatch_collection: list) -> list:
 
     modules_init_event_loop = asyncio.new_event_loop()
     tasks = []
@@ -50,9 +49,26 @@ def setup_modules(CONFIG, imported_modules, screenpatch_collection: list):
         date = time + " " + date
 
     tasks = asyncio.wait(tasks)
-    tasks_group = asyncio.gather(tasks)
+    asyncio.gather(tasks)
 
     modules_init_event_loop.run_until_complete(tasks)
     modules_init_event_loop.close()
 
-    return tasks_group, modules_objects
+    return modules_objects
+
+def execute_modules(modules_objects: list) -> list:
+    modules_execute_event_loop = asyncio.new_event_loop()
+    tasks = []
+    for module_object in modules_objects:
+
+        # preexecuting async function
+        module_execution_task = module_object.start()
+
+        tasks.append(modules_execute_event_loop.create_task(module_execution_task))
+
+    wait_tasks = asyncio.wait(tasks)
+
+    modules_res = modules_execute_event_loop.run_until_complete(wait_tasks)
+    modules_execute_event_loop.close()
+
+    return modules_res
