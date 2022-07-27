@@ -1,36 +1,17 @@
 #! /usr/bin/python3.10
 import os
-import asyncio
 import time
 
-
 from back.config_manager import get_config
-
-from back.text_formater import LCDScreen
-
-from back.lcd.drivers import Lcd
-
-from modules.base_screen_module import ScreenPatch
 from back.import_manager import import_modules, setup_modules, execute_modules
 from back.text_formater import (
     make_screenpatch_view,
     make_text_from_screenpatch_collection,
 )
 
-
-def update_screen(display: Lcd, screenpatch_collection: list, modules_objects: list) -> None:
-
-    unformated_text = make_text_from_screenpatch_collection(
-        screen=screen,
-        screenpatch_collection=screenpatch_collection,
-        modules_objects=modules_objects,
-    )
-
-    for i_row, line in enumerate(unformated_text):
-        display.lcd_display_string(
-            line,
-            i_row + 1,
-        )
+from modules.base_screen_module import ScreenPatch
+from back.text_formater import LCDScreen
+from back.lcd.drivers import Lcd
 
 
 def setup(CONFIG):
@@ -60,7 +41,7 @@ def setup(CONFIG):
     imported_modules = import_modules(modules_list=modules_list)
 
     # executing the `setup` method of every module
-    modules_objects = setup_modules(
+    tasks_group, modules_objects = setup_modules(
         CONFIG=CONFIG,
         imported_modules=imported_modules,
         screenpatch_collection=screenpatch_collection,
@@ -76,28 +57,40 @@ def main(display, screen, modules_objects, screenpatch_collection):
     while True:
         modules_res = execute_modules(modules_objects)
 
-        modules_output = []
         for module_res in modules_res:
 
             if not len(module_res):
                 continue
 
-            modules_output.append(list(module_res)[0].result()["screenpatch"])
-            
-
+            module_output_arguments = list(module_res)[0].result()
 
         update_screen(
             display=display,
             modules_objects=modules_objects,
-            screenpatch_collection=modules_output,
+            # screenpatch=module_output_arguments["screenpatch"],
         )
-
 
         if CONFIG["PRINT_SCREEN_IMAGE_TO_CONSOLE"]:
             make_screenpatch_view(screen, screenpatch_collection, modules_objects)
 
-        
-        time.sleep(CONFIG["GLOBAL_REFRASH_RATE"] - time.time() % CONFIG["GLOBAL_REFRASH_RATE"])
+        time.sleep(
+            CONFIG["GLOBAL_REFRASH_RATE"] - time.time() % CONFIG["GLOBAL_REFRASH_RATE"]
+        )
+
+
+def update_screen(display: Lcd, modules_objects) -> None:
+
+    unformated_text = make_text_from_screenpatch_collection(
+        screen=screen,
+        screenpatch_collection=screenpatch_collection,
+        modules_objects=modules_objects,
+    )
+
+    for i_row, line in enumerate(unformated_text):
+        display.lcd_display_string(
+            line,
+            i_row + 1,
+        )
 
 
 if __name__ == "__main__":
@@ -105,8 +98,5 @@ if __name__ == "__main__":
     SCRIPT_PATH = "/".join(os.path.realpath(__file__).split("/")[:-1])
     CONFIG = get_config(SCRIPT_PATH)
 
-    display, screen, modules_objects, screenpatch_collection = setup(
-        CONFIG
-    )
-
+    display, screen, modules_objects, screenpatch_collection = setup(CONFIG)
     main(display, screen, modules_objects, screenpatch_collection)

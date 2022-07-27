@@ -22,7 +22,9 @@ def import_modules(modules_list: list) -> list:
     return imported_modules
 
 
-def setup_modules(CONFIG: dict, imported_modules: list, screenpatch_collection: list) -> list:
+def setup_modules(
+    CONFIG: dict, imported_modules: list, screenpatch_collection: list
+) -> tuple:
 
     modules_init_event_loop = asyncio.new_event_loop()
     tasks = []
@@ -49,12 +51,13 @@ def setup_modules(CONFIG: dict, imported_modules: list, screenpatch_collection: 
         date = time + " " + date
 
     tasks = asyncio.wait(tasks)
-    asyncio.gather(tasks)
+    tasks_group = asyncio.gather(tasks)
 
     modules_init_event_loop.run_until_complete(tasks)
     modules_init_event_loop.close()
 
-    return modules_objects
+    return tasks_group, modules_objects
+
 
 def execute_modules(modules_objects: list) -> list:
     modules_execute_event_loop = asyncio.new_event_loop()
