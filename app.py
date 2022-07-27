@@ -15,15 +15,20 @@ from back.lcd.drivers import Lcd
 
 
 def setup(CONFIG):
-
+    """
+    importing modules classes from modules '.py' files
+    and creating class instances
+    """
     imported_modules = []
 
+    # setting up the display
+    display = Lcd()
+    display.lcd_clear()
     screen = LCDScreen(
         lines_count=CONFIG["LINES_COUNT"], line_length=CONFIG["LINE_LENGTH"]
     )
 
-    display = Lcd()
-
+    # getting modules configs from './misc/config.json
     modules_list = list(map(lambda x: x["name"], CONFIG["modules_data"]))
 
     screenpatch_collection = list(
@@ -37,32 +42,32 @@ def setup(CONFIG):
         )
     )
 
-    # importing ScreenPatch modules
+    # importing modules
     imported_modules = import_modules(modules_list=modules_list)
 
-    # executing the `setup` method of every module
+    # creating modules instances
     tasks_group, modules_objects = setup_modules(
         CONFIG=CONFIG,
         imported_modules=imported_modules,
         screenpatch_collection=screenpatch_collection,
     )
 
-    display.lcd_clear()
-
     return display, screen, modules_objects, screenpatch_collection
 
 
 def main(display, screen, modules_objects, screenpatch_collection):
-
+    """
+    executing modules instances and updating the screen
+    """
     while True:
         modules_res = execute_modules(modules_objects)
 
-        for module_res in modules_res:
+        # for module_res in modules_res:
 
-            if not len(module_res):
-                continue
+        #     if not len(module_res):
+        #         continue
 
-            module_output_arguments = list(module_res)[0].result()
+        #     module_output_arguments = list(module_res)[0].result()
 
         update_screen(
             display=display,
@@ -79,6 +84,9 @@ def main(display, screen, modules_objects, screenpatch_collection):
 
 
 def update_screen(display: Lcd, modules_objects) -> None:
+    """
+    updating the screen with modules text data
+    """
 
     unformated_text = make_text_from_screenpatch_collection(
         screen=screen,

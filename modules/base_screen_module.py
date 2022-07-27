@@ -29,7 +29,7 @@ class ScreenPatchModule:
         return self.current_text
 
     async def setup(self):
-        raise NotImplementedError
+        pass
 
     async def start(self):
         raise NotImplementedError

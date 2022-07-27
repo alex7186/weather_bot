@@ -60,8 +60,6 @@ stop:
 
 start:
 	@$(MAKE) --no-print-directory _start-service
-	@sleep 2
-	@$(MAKE) --no-print-directory status
 
 copy-service:
 	@echo "\n⚙️  moving service to $(_service-path)\n"
