@@ -8,8 +8,13 @@ from back.print_manager import mprint
 
 
 class MainModule(ScreenPatchModule):
-    def __init__(self, screenpatch: ScreenPatch, display: Lcd, CONFIG: dict) -> None:
-        super().__init__(screenpatch, display)
+    def __init__(
+        self, screenpatch: ScreenPatch, refrash_skip_rate: int, CONFIG: dict
+    ) -> None:
+        super().__init__(screenpatch)
+
+        self.refrash_skip_rate = refrash_skip_rate
+        self.execution_count = 0
 
     def get_date_string(self) -> str:
         cur_datetime = datetime.now()
@@ -32,33 +37,19 @@ class MainModule(ScreenPatchModule):
 
         return res_text
 
-    async def setup(self):
-        pass
-
     async def start(self):
-        # def start(self):
-        while True:
-            date_text = shift_center(
-                self.get_date_string(),
-                line_length=self.screenpatch.line_length,
-            )
 
-            self.update_screenpath(date_text)
+        self.execution_count = self.execution_count % self.refrash_skip_rate
 
-            await asyncio.sleep(1)
-            # mprint('still working')
+        if self.execution_count != 0 or (self.refrash_skip_rate != 1):
 
+            self.execution_count += 1
+            return {"screenpatch": self.screenpatch, "new_text": ""}
 
-module: MainModule
+        self.set_screenpatch_text(self.get_date_string())
 
-
-async def module_start(screenpatch, display, CONFIG):
-    global module
-    module = MainModule(screenpatch=screenpatch, display=display, CONFIG=CONFIG)
-
-    await module.setup()
-
-
-async def module_execute():
-    global module
-    await module.start()
+        self.execution_count += 1
+        return {
+            "screenpatch": self.screenpatch,
+            "new_text": self.get_screenpatch_text(),
+        }

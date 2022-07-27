@@ -1,8 +1,5 @@
 from typing import NamedTuple
 
-# from back.weather_api_service import Weather
-# from modules.base_screen_module import ScreenPatch
-
 
 class LCDScreen(NamedTuple):
     lines_count: int
@@ -16,9 +13,7 @@ def shift_left(text: str, line_length: int = 14, base_margin_left: int = 9) -> s
 
 def shift_right(text: str, line_length: int = 14, base_margin_left: int = 9) -> str:
 
-    # print('shift_right', line_length, base_margin_left)
     text_formatt = "{:>" + f"{line_length  - base_margin_left}" + "}"
-    # print('text_formatt', text_formatt)
     return (text_formatt).format(text)
 
 
@@ -28,24 +23,44 @@ def shift_center(
 
     text = input_text.strip()
 
-    # print(f'text |{text}| len {len(text)}')
     margin = (line_length + 1 - len(text)) // 2
     margin = margin if margin > 0 else 0
-    return ("{:>" + f"{margin + len(text)}" + "}").format(text)
+
+    res = ("{:>" + f"{margin + len(text)}" + "}").format(text)
+    res += " " * (line_length - len(res))
+
+    return res
 
 
-# def brackets(text: str, screenpatch: ScreenPatch) -> str:
-#     lines = text.split("\n")
+def make_text_from_screenpatch_collection(
+    screen: LCDScreen, screenpatch_collection: list, modules_objects
+) -> str:
+    unformated_text = [""] * screen.lines_count
 
-#     if len(lines) > screenpatch.lines_count:
-#         raise ValueError("screenpatch size error")
+    for i_screenpatch, screenpatch in enumerate(screenpatch_collection):
+        screenpatch_text_split = (
+            modules_objects[i_screenpatch].get_screenpatch_text().split("\n")
+        )
 
-#     s = ""
-#     s += "╭" + (screenpatch.line_length + 1) * "―" + "╮" + "\n"
+        for i_row, row_screenpatch in enumerate(screenpatch.rows):
+            unformated_text[row_screenpatch] = screenpatch_text_split[i_row]
 
-#     for line in lines:
-#         s += "|" + ("{:<" + f"{screenpatch.line_length + 1}" + "}").format(line) + "|" + "\n"
+    return unformated_text
 
-#     s += "╰" + (screen.line_length + 1) * "―" + "╯"
 
-#     return s
+def make_screenpatch_view(
+    screen: LCDScreen, screenpatch_collection: list, modules_objects
+):
+
+    unformated_text = make_text_from_screenpatch_collection(
+        screen=screen,
+        screenpatch_collection=screenpatch_collection,
+        modules_objects=modules_objects,
+    )
+
+    s = ""
+    s += "╭" + (screen.line_length + 1) * "―" + "╮" + "\n"
+    for line in unformated_text:
+        s += "|" + ("{:<" + f"{screen.line_length + 1}" + "}").format(line) + "|" + "\n"
+    s += "╰" + (screen.line_length + 1) * "―" + "╯"
+    print(s)

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from back.weather_formater import LCDScreen
-from back.text_formater import shift_center, shift_left, shift_right
+from back.text_formater import shift_left, shift_right
 
 
 def get_date_string(screen: LCDScreen) -> str:

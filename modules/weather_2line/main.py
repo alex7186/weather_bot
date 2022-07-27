@@ -14,16 +14,23 @@ def get_weather_safe(coordinates, CONFIG):
         weather = get_weather(coordinates, CONFIG)
     except ApiServiceError as e:
         mprint(f"Не удалось получить погоду по координатам {coordinates}")
-        # weather = Weather()
+        weather = Weather()
         exit(1)
 
     return weather
 
 
 class MainModule(ScreenPatchModule):
-    def __init__(self, screenpatch: ScreenPatch, display: Lcd, CONFIG: dict) -> None:
+    def __init__(
+        self, screenpatch: ScreenPatch, refrash_skip_rate: int, CONFIG: dict
+    ) -> None:
 
-        super().__init__(screenpatch, display)
+        super().__init__(
+            screenpatch,
+        )
+        self.refrash_skip_rate = refrash_skip_rate
+        self.execution_count = 0
+
         self.CONFIG = CONFIG
 
     def get_weather_string(self) -> str:
@@ -38,28 +45,19 @@ class MainModule(ScreenPatchModule):
 
         return res_text
 
-    async def setup(self):
-        pass
-
     async def start(self):
-        while True:
 
-            self.update_screenpath(self.get_weather_string())
+        self.execution_count = self.execution_count % self.refrash_skip_rate
 
-            await asyncio.sleep(600)
-            # mprint('still working')
+        if self.execution_count != 0:
 
+            self.execution_count += 1
+            return {"screenpatch": self.screenpatch, "new_text": ""}
 
-module: MainModule
+        self.set_screenpatch_text(self.get_weather_string())
 
-
-async def module_start(screenpatch, display, CONFIG):
-    global module
-    module = MainModule(screenpatch=screenpatch, display=display, CONFIG=CONFIG)
-
-    await module.setup()
-
-
-async def module_execute():
-    global module
-    await module.start()
+        self.execution_count += 1
+        return {
+            "screenpatch": self.screenpatch,
+            "new_text": self.get_screenpatch_text(),
+        }

@@ -11,6 +11,7 @@ def import_modules(modules_list):
     import all "main.py" files
     by template <SCRIPT_PATH>/modules/module_1/main.py
     """
+
     modules_path_list = [f"modules.{module_name}.main" for module_name in modules_list]
     APP_NAME = "import_manager"
 
@@ -22,25 +23,25 @@ def import_modules(modules_list):
     return imported_modules
 
 
-def start_modules(
-    imported_modules, screenpatch_collection: list, display: Lcd, CONFIG: dict
-):
-    """
-    executes "module_start()" function of each imported module
-    in "imported_modules"
-    "SCRIPT_PATH" param is just passing to the "module_start()" function
-    """
+def setup_modules(CONFIG, imported_modules, screenpatch_collection: list):
+
     modules_init_event_loop = asyncio.new_event_loop()
     tasks = []
+    modules_objects = []
+    refrash_skip_rates = list(
+        map(lambda x: x["refrash_skip_rate"], CONFIG["modules_data"])
+    )
+
     for i, module in enumerate(imported_modules):
-        # print('screenpatch_collection[i]', screenpatch_collection[i])
-        tasks.append(
-            modules_init_event_loop.create_task(
-                module.module_start(
-                    screenpatch_collection[i], display=display, CONFIG=CONFIG
-                )
+        modules_objects.append(
+            module.MainModule(
+                screenpatch=screenpatch_collection[i],
+                refrash_skip_rate=refrash_skip_rates[i],
+                CONFIG=CONFIG,
             )
         )
+
+        tasks.append(modules_init_event_loop.create_task(modules_objects[i].setup()))
 
         date = ".".join(
             str(el) for el in list(datetime.now().date().timetuple())[:3][::-1]
@@ -54,28 +55,4 @@ def start_modules(
     modules_init_event_loop.run_until_complete(tasks)
     modules_init_event_loop.close()
 
-    return tasks_group
-
-
-def execute_modules(imported_modules):
-    """
-    executes "module_execute()" function
-    of each imported module in "imported_modules"
-
-    modules should react on "event"
-    "SCRIPT_PATH, vk_session_api" params
-    are just passing to the "module_start()" function
-    """
-    modules_execute_event_loop = asyncio.new_event_loop()
-    tasks = []
-    for module in imported_modules:
-
-        # preexecuting async function
-        module_execution_task = module.module_execute()
-
-        tasks.append(modules_execute_event_loop.create_task(module_execution_task))
-
-    wait_tasks = asyncio.wait(tasks)
-
-    modules_execute_event_loop.run_until_complete(wait_tasks)
-    modules_execute_event_loop.close()
+    return tasks_group, modules_objects

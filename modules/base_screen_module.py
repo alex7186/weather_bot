@@ -18,46 +18,12 @@ class ScreenPatch:
 class ScreenPatchModule:
     """Patch screen manager module"""
 
-    def __init__(self, screenpatch: ScreenPatch, display: Lcd) -> None:
+    def __init__(self, screenpatch: ScreenPatch) -> None:
         self.screenpatch = screenpatch
         self.current_text: str = ""
-        self.display = display
 
-    def _check_screenpatch_text(self, new_text: str) -> bool:
-
-        # new_text_splitted = new_text.split('\n')
-        # max_text_length = list(map(len, new_text_splitted))
-        # print(f"{new_text_splitted=}")
-        # print(f"{max_text_length=}")
-
-        # if len(new_text_splitted) > len(self.screenpatch.rows):
-        #     raise ValueError(
-        #         f"can`t put text |{new_text_splitted}| to patch with rows {self.screenpatch.rows}"
-        #     )
-        # elif max_text_length > self.screenpatch.line_length + 1:
-        #     raise ValueError(
-        #         f"can`t put text |{new_text_splitted}| with max len {max_text_length} \
-        #         to patch with line length {self.screenpatch.line_length}"
-        #     )
-
+    def set_screenpatch_text(self, new_text):
         self.current_text = new_text
-        return True
-
-    def update_screenpath(self, new_text: str) -> None:
-
-        self._check_screenpatch_text(new_text)  # new text checking procedure
-
-        new_text_splitted = new_text.split("\n")
-
-        for i, row in enumerate(self.screenpatch.rows):
-
-            self.display.lcd_display_string(
-                shift_center(
-                    new_text_splitted[i],
-                    line_length=self.screenpatch.line_length,
-                ),
-                row + 1,
-            )
 
     def get_screenpatch_text(self) -> str:
         return self.current_text
