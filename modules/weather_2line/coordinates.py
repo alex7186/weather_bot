@@ -1,7 +1,7 @@
 from typing import NamedTuple
 from subprocess import Popen, PIPE
 
-from back.exceptions import CantGetCoordinates
+from modules.weather_2line.exceptions import CantGetCoordinates
 
 
 class Coordinates(NamedTuple):
@@ -42,8 +42,3 @@ def get_coords() -> Coordinates:
 
     # return clear_whereami_output(whereami_output)
     return Coordinates(55.3955, 37.2839)
-
-
-if __name__ == "__main__":
-    coords = get_coords()
-    print(coords)

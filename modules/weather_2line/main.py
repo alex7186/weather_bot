@@ -2,14 +2,14 @@ import asyncio
 from back.lcd.drivers import Lcd
 
 from modules.base_screen_module import ScreenPatch, ScreenPatchModule
-from back.weather_formater import format_weather
-from back.weather_api_service import Weather, get_weather
-from back.coordinates import Coordinates, get_coords
-from back.exceptions import ApiServiceError, CantGetCoordinates
+from modules.weather_2line.weather_formater import format_weather
+from modules.weather_2line.weather_api_service import Weather, get_weather
+from modules.weather_2line.coordinates import Coordinates, get_coords
+from modules.weather_2line.exceptions import ApiServiceError, CantGetCoordinates
 from back.print_manager import mprint
 
 
-def get_weather_safe(coordinates, CONFIG):
+def get_weather_safe(coordinates: Coordinates, CONFIG: dict):
     try:
         weather = get_weather(coordinates, CONFIG)
     except ApiServiceError as e:
