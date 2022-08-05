@@ -1,12 +1,12 @@
-import asyncio
-from back.lcd.drivers import Lcd
+from back.lcd.drivers import CustomCharacters
+from back.print_manager import mprint
 
 from modules.base_screen_module import ScreenPatch, ScreenPatchModule
+
 from modules.weather_2line.weather_formater import format_weather
 from modules.weather_2line.weather_api_service import Weather, get_weather
 from modules.weather_2line.coordinates import Coordinates, get_coords
 from modules.weather_2line.exceptions import ApiServiceError, CantGetCoordinates
-from back.print_manager import mprint
 
 
 def get_weather_safe(coordinates: Coordinates, CONFIG: dict):
@@ -33,7 +33,7 @@ class MainModule(ScreenPatchModule):
 
         self.CONFIG = CONFIG
 
-    def get_weather_string(self) -> str:
+    async def generate_screen_text(self) -> str:
         try:
             coordinates = get_coords()
         except CantGetCoordinates:
@@ -44,20 +44,3 @@ class MainModule(ScreenPatchModule):
         res_text = format_weather(weather, self.screenpatch)
 
         return res_text
-
-    async def start(self):
-
-        self.execution_count = self.execution_count % self.refrash_skip_rate
-
-        if self.execution_count != 0:
-
-            self.execution_count += 1
-            return {"screenpatch": self.screenpatch, "new_text": ""}
-
-        self.set_screenpatch_text(self.get_weather_string())
-
-        self.execution_count += 1
-        return {
-            "screenpatch": self.screenpatch,
-            "new_text": self.get_screenpatch_text(),
-        }

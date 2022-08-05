@@ -1,10 +1,8 @@
-import asyncio
 from datetime import datetime
-from back.lcd.drivers import Lcd
+
 
 from modules.base_screen_module import ScreenPatch, ScreenPatchModule
 from back.text_formater import shift_center, shift_left, shift_right
-from back.print_manager import mprint
 
 
 class MainModule(ScreenPatchModule):
@@ -16,7 +14,7 @@ class MainModule(ScreenPatchModule):
         self.refrash_skip_rate = refrash_skip_rate
         self.execution_count = 0
 
-    def get_date_string(self) -> str:
+    async def generate_screen_text(self) -> str:
         cur_datetime = datetime.now()
         cur_hour = cur_datetime.hour
         cur_minute = cur_datetime.minute
@@ -47,20 +45,3 @@ class MainModule(ScreenPatchModule):
         )
 
         return res_text
-
-    async def start(self):
-
-        self.execution_count = self.execution_count % self.refrash_skip_rate
-
-        if self.execution_count != 0 or (self.refrash_skip_rate != 1):
-
-            self.execution_count += 1
-            return {"screenpatch": self.screenpatch, "new_text": ""}
-
-        self.set_screenpatch_text(self.get_date_string())
-
-        self.execution_count += 1
-        return {
-            "screenpatch": self.screenpatch,
-            "new_text": self.get_screenpatch_text(),
-        }
