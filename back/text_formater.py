@@ -13,7 +13,7 @@ def shift_left(text: str, line_length: int = 14, base_margin_left: int = 9) -> s
 
 def shift_right(text: str, line_length: int = 14, base_margin_left: int = 9) -> str:
 
-    text_formatt = "{:>" + f"{line_length  - base_margin_left}" + "}"
+    text_formatt = "{:>" + f"{(line_length - 1)  - base_margin_left}" + "}"
     return (text_formatt).format(text)
 
 

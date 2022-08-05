@@ -23,11 +23,22 @@ class MainModule(ScreenPatchModule):
         cur_second = cur_datetime.second
 
         res_text = ""
-        res_text += shift_center(
-            "{}.{}.{} {}:{}:{}".format(
+
+        res_text += shift_left(
+            "{}.{}.{}".format(
                 cur_datetime.year,
-                cur_datetime.month,
-                cur_datetime.day,
+                cur_datetime.month
+                if cur_datetime.month > 9
+                else "0" + str(cur_datetime.month),
+                cur_datetime.day
+                if cur_datetime.day > 9
+                else "0" + str(cur_datetime.day),
+            ),
+            line_length=self.screenpatch.line_length,
+        )
+
+        res_text += shift_right(
+            "{}:{}:{}".format(
                 cur_hour if cur_hour > 9 else "0" + str(cur_hour),
                 cur_minute if cur_minute > 9 else "0" + str(cur_minute),
                 cur_second if cur_second > 9 else "0" + str(cur_second),
