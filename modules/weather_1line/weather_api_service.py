@@ -7,8 +7,8 @@ import requests
 from urllib.error import URLError
 import json
 
-from modules.weather_2line.exceptions import ApiServiceError
-from modules.weather_2line.coordinates import Coordinates
+from modules.weather_1line.exceptions import ApiServiceError
+from modules.weather_1line.coordinates import Coordinates
 
 
 Celsius = int
@@ -28,8 +28,8 @@ class WeatherType(Enum):
 class Weather(NamedTuple):
     temperature: Celsius = 0
     weather_type: WeatherType = WeatherType.NONE
-    sunrise: datetime = datetime.now()
-    sunset: datetime = datetime.now()
+    # sunrise: datetime = datetime.now()
+    # sunset: datetime = datetime.now()
 
 
 def get_weather(coords: Coordinates, CONFIG: dict) -> Weather:
@@ -75,14 +75,14 @@ def _parse_openweather_responce(openweather_responce: str) -> Weather:
 
     temperature = _parse_temperature(openweather_dict)
     weather_type = _parse_weather_type(openweather_dict)
-    sunset = _parse_suntime(openweather_dict, "sunset")
-    sunrise = _parse_suntime(openweather_dict, "sunrise")
+    # sunset = _parse_suntime(openweather_dict, "sunset")
+    # sunrise = _parse_suntime(openweather_dict, "sunrise")
 
     return Weather(
         temperature=temperature,
         weather_type=weather_type,
-        sunset=sunset,
-        sunrise=sunrise,
+        # sunset=sunset,
+        # sunrise=sunrise,
     )
 
 

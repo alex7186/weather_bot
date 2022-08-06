@@ -3,10 +3,10 @@ from back.print_manager import mprint
 
 from modules.base_screen_module import ScreenPatch, ScreenPatchModule
 
-from modules.weather_2line.weather_formater import format_weather
-from modules.weather_2line.weather_api_service import Weather, get_weather
-from modules.weather_2line.coordinates import Coordinates, get_coords
-from modules.weather_2line.exceptions import ApiServiceError, CantGetCoordinates
+from modules.weather_1line.weather_formater import format_weather
+from modules.weather_1line.weather_api_service import Weather, get_weather
+from modules.weather_1line.coordinates import Coordinates, get_coords
+from modules.weather_1line.exceptions import ApiServiceError, CantGetCoordinates
 
 
 def get_weather_safe(coordinates: Coordinates, CONFIG: dict):
@@ -22,7 +22,11 @@ def get_weather_safe(coordinates: Coordinates, CONFIG: dict):
 
 class MainModule(ScreenPatchModule):
     def __init__(
-        self, screenpatch: ScreenPatch, refrash_skip_rate: int, CONFIG: dict
+        self,
+        screenpatch: ScreenPatch,
+        refrash_skip_rate: int,
+        CONFIG: dict,
+        custom_charecters: CustomCharacters,
     ) -> None:
 
         super().__init__(

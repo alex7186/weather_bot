@@ -43,7 +43,10 @@ def make_text_from_screenpatch_collection(
         )
 
         for i_row, row_screenpatch in enumerate(screenpatch.rows):
-            unformated_text[row_screenpatch] = screenpatch_text_split[i_row]
+            try:
+                unformated_text[row_screenpatch] = screenpatch_text_split[i_row]
+            except IndexError:
+                unformated_text[row_screenpatch] = "IndexError"
 
     return unformated_text
 

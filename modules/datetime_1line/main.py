@@ -1,5 +1,5 @@
 from datetime import datetime
-
+from back.lcd.drivers import CustomCharacters
 
 from modules.base_screen_module import ScreenPatch, ScreenPatchModule
 from back.text_formater import shift_center, shift_left, shift_right
@@ -7,7 +7,11 @@ from back.text_formater import shift_center, shift_left, shift_right
 
 class MainModule(ScreenPatchModule):
     def __init__(
-        self, screenpatch: ScreenPatch, refrash_skip_rate: int, CONFIG: dict
+        self,
+        screenpatch: ScreenPatch,
+        refrash_skip_rate: int,
+        CONFIG: dict,
+        custom_charecters: CustomCharacters,
     ) -> None:
         super().__init__(screenpatch)
 

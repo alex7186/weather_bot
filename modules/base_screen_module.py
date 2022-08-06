@@ -28,9 +28,6 @@ class ScreenPatchModule:
     def get_screenpatch_text(self) -> str:
         return self.current_text
 
-    async def setup(self):
-        pass
-
     async def generate_screen_text(self) -> str:
         raise NotImplementedError
 
@@ -38,7 +35,6 @@ class ScreenPatchModule:
         self.execution_count = self.execution_count % self.refrash_skip_rate
 
         if self.execution_count == 0:
-
             self.set_screenpatch_text(await self.generate_screen_text())
 
         self.execution_count += 1

@@ -5,7 +5,9 @@ from importlib import import_module
 from back.print_manager import mprint
 
 
-def import_modules(modules_list: list) -> list:
+def import_modules(
+    modules_list: list, CONFIG: dict, screenpatch_collection: list, custom_charecters
+) -> list:
     """
     import all "main.py" files
     by template <SCRIPT_PATH>/modules/module_1/main.py
@@ -19,15 +21,6 @@ def import_modules(modules_list: list) -> list:
         imported_modules.append(import_module(module))
         mprint(APP_NAME + " " + f": Imported {modules_list[i]}")
 
-    return imported_modules
-
-
-def setup_modules(
-    CONFIG: dict, imported_modules: list, screenpatch_collection: list
-) -> tuple:
-
-    modules_init_event_loop = asyncio.new_event_loop()
-    tasks = []
     modules_objects = []
     refrash_skip_rates = list(
         map(lambda x: x["refrash_skip_rate"], CONFIG["modules_data"])
@@ -39,10 +32,9 @@ def setup_modules(
                 screenpatch=screenpatch_collection[i],
                 refrash_skip_rate=refrash_skip_rates[i],
                 CONFIG=CONFIG,
+                custom_charecters=custom_charecters,
             )
         )
-
-        tasks.append(modules_init_event_loop.create_task(modules_objects[i].setup()))
 
         date = ".".join(
             str(el) for el in list(datetime.now().date().timetuple())[:3][::-1]
@@ -50,13 +42,7 @@ def setup_modules(
         time = str(datetime.now().time()).split(".")[0]
         date = time + " " + date
 
-    tasks = asyncio.wait(tasks)
-    tasks_group = asyncio.gather(tasks)
-
-    modules_init_event_loop.run_until_complete(tasks)
-    modules_init_event_loop.close()
-
-    return tasks_group, modules_objects
+    return modules_objects
 
 
 def execute_modules(modules_objects: list) -> list:

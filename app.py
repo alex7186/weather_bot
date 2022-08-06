@@ -3,7 +3,7 @@ import os
 import time
 
 from back.config_manager import get_config
-from back.import_manager import import_modules, setup_modules, execute_modules
+from back.import_manager import import_modules, execute_modules
 from back.text_formater import (
     make_screenpatch_view,
     make_text_from_screenpatch_collection,
@@ -11,7 +11,7 @@ from back.text_formater import (
 
 from modules.base_screen_module import ScreenPatch
 from back.text_formater import LCDScreen
-from back.lcd.drivers import Lcd
+from back.lcd.drivers import Lcd, CustomCharacters
 
 
 def setup(CONFIG):
@@ -27,6 +27,7 @@ def setup(CONFIG):
     screen = LCDScreen(
         lines_count=CONFIG["LINES_COUNT"], line_length=CONFIG["LINE_LENGTH"]
     )
+    custom_charecters = CustomCharacters(display)
 
     # getting modules configs from './misc/config.json
     modules_list = list(map(lambda x: x["name"], CONFIG["modules_data"]))
@@ -43,12 +44,10 @@ def setup(CONFIG):
     )
 
     # importing modules
-    imported_modules = import_modules(modules_list=modules_list)
-
-    # creating modules instances
-    tasks_group, modules_objects = setup_modules(
+    modules_objects = import_modules(
+        modules_list=modules_list,
         CONFIG=CONFIG,
-        imported_modules=imported_modules,
+        custom_charecters=custom_charecters,
         screenpatch_collection=screenpatch_collection,
     )
 

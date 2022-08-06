@@ -1,7 +1,7 @@
 from typing import NamedTuple
 from subprocess import Popen, PIPE
 
-from modules.weather_2line.exceptions import CantGetCoordinates
+from modules.weather_1line.exceptions import CantGetCoordinates
 
 
 class Coordinates(NamedTuple):
