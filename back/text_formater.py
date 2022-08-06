@@ -6,27 +6,42 @@ class LCDScreen(NamedTuple):
     line_length: int
 
 
-def shift_left(text: str, line_length: int = 14, base_margin_left: int = 9) -> str:
+def shift_left(
+    text: str, line_length: int = 14, base_margin_left: int = 9, skip_left: int = 0
+) -> str:
 
-    return ("{:<" + f"{base_margin_left}" + "} ").format(text)
+    return (" " * skip_left + "{:<" + f"{base_margin_left}" + "} ").format(text)
 
 
-def shift_right(text: str, line_length: int = 14, base_margin_left: int = 9) -> str:
+def shift_right(
+    text: str, line_length: int = 14, base_margin_left: int = 9, skip_left: int = 0
+) -> str:
 
-    text_formatt = "{:>" + f"{(line_length - 1)  - base_margin_left}" + "}"
+    text_formatt = (
+        " " * skip_left + "{:>" + f"{(line_length - 1)  - base_margin_left}" + "}"
+    )
     return (text_formatt).format(text)
 
 
 def shift_center(
-    input_text: str, line_length: int = 14, base_margin_left: int = 9
+    input_text: str,
+    line_length: int = 14,
+    base_margin_left: int = 9,
+    skip_left: int = 0,
 ) -> str:
 
     text = input_text.strip()
 
-    margin = (line_length + 1 - len(text)) // 2
+    line_clean = text[:]
+    while "{" in line_clean:
+        bracket_index = line_clean.index("{")
+        line_clean = line_clean[:bracket_index] + line_clean[bracket_index + 5 :]
+        line_clean = line_clean.replace("}", "@")
+
+    margin = (line_length + 1 - len(line_clean)) // 2
     margin = margin if margin > 0 else 0
 
-    res = ("{:>" + f"{margin + len(text)}" + "}").format(text)
+    res = (" " * skip_left + "{:>" + f"{margin + len(text)}" + "}").format(text)
     res += " " * (line_length - len(res))
 
     return res
@@ -64,6 +79,16 @@ def make_screenpatch_view(
     s = ""
     s += "╭" + (screen.line_length + 1) * "―" + "╮" + "\n"
     for line in unformated_text:
-        s += "|" + ("{:<" + f"{screen.line_length + 1}" + "}").format(line) + "|" + "\n"
+        line_clean = line[:]
+        while "{" in line_clean:
+            bracket_index = line_clean.index("{")
+            line_clean = line_clean[:bracket_index] + line_clean[bracket_index + 5 :]
+            line_clean = line_clean.replace("}", "@")
+        s += (
+            "|"
+            + ("{:<" + f"{screen.line_length + 1}" + "}").format(line_clean)
+            + "|"
+            + "\n"
+        )
     s += "╰" + (screen.line_length + 1) * "―" + "╯"
     print(s)

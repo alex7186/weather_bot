@@ -10,6 +10,7 @@ base_margin_left = 9
 
 def format_weather(weather: Weather, screenpatch: ScreenPatch) -> str:
     """Formats weather data in string"""
+    print("formatting weather", f"{screenpatch.line_length=}")
 
     def format_weather_type(weather: Weather, screenpatch: ScreenPatch):
 
@@ -18,28 +19,16 @@ def format_weather(weather: Weather, screenpatch: ScreenPatch) -> str:
             map(str, (weather.weather_type.value, weather.temperature, "C"))
         )
 
-        return shift_center(result.strip(), line_length=screenpatch.line_length)
-
-    # def format_sun_periods(weather: Weather, screenpatch: ScreenPatch) -> str:
-
-    #     result = ""
-
-    #     result += f"{weather.sunrise.strftime('%H:%M')}"
-    #     result += " - "
-    #     result += f"{weather.sunset.strftime('%H:%M')}"
-
-    #     result = shift_center(
-    #         result.strip(),
-    #         line_length=screenpatch.line_length,
-    #     )
-
-    #     return result
+        return shift_center(
+            result.strip(),
+            line_length=screenpatch.line_length,
+            skip_left=screenpatch.columns_start - 1,
+        )
 
     def format_screen(weather: Weather, screenpatch: ScreenPatch) -> str:
 
         result = []
         result.append(format_weather_type(weather, screenpatch))
-        # result.append(format_sun_periods(weather, screenpatch))
 
         return "\n".join(result)
 

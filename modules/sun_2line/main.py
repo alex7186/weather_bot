@@ -22,6 +22,7 @@ class MainModule(ScreenPatchModule):
         )
         self.refrash_skip_rate = refrash_skip_rate
         self.execution_count = 0
+        self.custom_charecters = custom_charecters
 
         self.CONFIG = CONFIG
 
@@ -31,4 +32,4 @@ class MainModule(ScreenPatchModule):
 
         sun_periods = get_sun(coordinates, self.CONFIG)
 
-        return format_sun(sun_periods, self.screenpatch)
+        return format_sun(sun_periods, self.screenpatch, self.custom_charecters)

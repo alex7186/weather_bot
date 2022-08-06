@@ -59,19 +59,11 @@ def main(display, screen, modules_objects, screenpatch_collection):
     executing modules instances and updating the screen
     """
     while True:
-        modules_res = execute_modules(modules_objects)
-
-        # for module_res in modules_res:
-
-        #     if not len(module_res):
-        #         continue
-
-        #     module_output_arguments = list(module_res)[0].result()
+        execute_modules(modules_objects)
 
         update_screen(
             display=display,
             modules_objects=modules_objects,
-            # screenpatch=module_output_arguments["screenpatch"],
         )
 
         if CONFIG["PRINT_SCREEN_IMAGE_TO_CONSOLE"]:
@@ -94,7 +86,8 @@ def update_screen(display: Lcd, modules_objects) -> None:
     )
 
     for i_row, line in enumerate(unformated_text):
-        display.lcd_display_string(
+
+        display.lcd_display_extended_string(
             line,
             i_row + 1,
         )
