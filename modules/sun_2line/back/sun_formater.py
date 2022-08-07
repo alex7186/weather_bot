@@ -20,14 +20,27 @@ def format_sun(
 
     result = []
 
+    # with open(f"misc/custom_chars.json", "r") as f:
+    #     sun_top_l = json.load(f)["sun_top_l"]
+
+    # sun_custom_charecters = {
+    #     "sun_top_l": sun_top_l,
+    #     "sun_top_r": reflect_hor(sun_top_l),
+    #     "sun_btm_l": reflect_vert(sun_top_l),
+    #     "sun_btm_r": reflect_hor(reflect_vert(sun_top_l)),
+    # }
+
     with open(f"misc/custom_chars.json", "r") as f:
-        sun_top_l = json.load(f)["sun_top_l"]
+        res = json.load(f)
+
+        arrow_top_l = res["arrow_top_l"]
+        arrow_btm_l = res["arrow_btm_l"]
 
     sun_custom_charecters = {
-        "sun_top_l": sun_top_l,
-        "sun_top_r": reflect_hor(sun_top_l),
-        "sun_btm_l": reflect_vert(sun_top_l),
-        "sun_btm_r": reflect_hor(reflect_vert(sun_top_l)),
+        "sun_top_l": arrow_top_l,
+        "sun_top_r": reflect_hor(arrow_top_l),
+        "sun_btm_l": arrow_btm_l,
+        "sun_btm_r": reflect_hor(arrow_btm_l),
     }
 
     custom_charecters.char_1_data = sun_custom_charecters["sun_top_l"]

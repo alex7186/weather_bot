@@ -23,7 +23,7 @@ def setup(CONFIG):
 
     # setting up the display
     display = Lcd()
-    display.lcd_clear()
+    # display.lcd_clear()
     screen = LCDScreen(
         lines_count=CONFIG["LINES_COUNT"], line_length=CONFIG["LINE_LENGTH"]
     )
