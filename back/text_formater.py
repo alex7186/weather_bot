@@ -1,4 +1,5 @@
 from typing import NamedTuple
+from back.print_manager import mprint
 
 
 class LCDScreen(NamedTuple):
@@ -91,4 +92,4 @@ def make_screenpatch_view(
             + "\n"
         )
     s += "╰" + (screen.line_length + 1) * "―" + "╯"
-    print(s)
+    mprint(s)

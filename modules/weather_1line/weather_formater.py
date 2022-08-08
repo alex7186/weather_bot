@@ -10,7 +10,6 @@ base_margin_left = 9
 
 def format_weather(weather: Weather, screenpatch: ScreenPatch) -> str:
     """Formats weather data in string"""
-    print("formatting weather", f"{screenpatch.line_length=}")
 
     def format_weather_type(weather: Weather, screenpatch: ScreenPatch):
 

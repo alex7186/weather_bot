@@ -14,7 +14,7 @@ from back.text_formater import LCDScreen
 from back.lcd.drivers import Lcd, CustomCharacters
 
 
-def setup(CONFIG):
+def get_modules(CONFIG):
     """
     importing modules classes from modules '.py' files
     and creating class instances
@@ -23,7 +23,6 @@ def setup(CONFIG):
 
     # setting up the display
     display = Lcd()
-    # display.lcd_clear()
     screen = LCDScreen(
         lines_count=CONFIG["LINES_COUNT"], line_length=CONFIG["LINE_LENGTH"]
     )
@@ -59,11 +58,17 @@ def main(display, screen, modules_objects, screenpatch_collection):
     executing modules instances and updating the screen
     """
     while True:
-        execute_modules(modules_objects)
+        execute_modules(modules_objects=modules_objects)
+
+        unformated_text = make_text_from_screenpatch_collection(
+            screen=screen,
+            screenpatch_collection=screenpatch_collection,
+            modules_objects=modules_objects,
+        )
 
         update_screen(
             display=display,
-            modules_objects=modules_objects,
+            unformated_text=unformated_text,
         )
 
         if CONFIG["PRINT_SCREEN_IMAGE_TO_CONSOLE"]:
@@ -74,16 +79,10 @@ def main(display, screen, modules_objects, screenpatch_collection):
         )
 
 
-def update_screen(display: Lcd, modules_objects) -> None:
+def update_screen(display: Lcd, unformated_text: str) -> None:
     """
     updating the screen with modules text data
     """
-
-    unformated_text = make_text_from_screenpatch_collection(
-        screen=screen,
-        screenpatch_collection=screenpatch_collection,
-        modules_objects=modules_objects,
-    )
 
     for i_row, line in enumerate(unformated_text):
 
@@ -98,5 +97,4 @@ if __name__ == "__main__":
     SCRIPT_PATH = "/".join(os.path.realpath(__file__).split("/")[:-1])
     CONFIG = get_config(SCRIPT_PATH)
 
-    display, screen, modules_objects, screenpatch_collection = setup(CONFIG)
-    main(display, screen, modules_objects, screenpatch_collection)
+    main(*get_modules(CONFIG))
