@@ -10,14 +10,14 @@ push:
 	@$(MAKE) --no-print-directory _git_commit
 	@echo "\n⚙️  pushing as $(_commit_name)\n"
 	@git push origin main
-	@echo "\n✅  done!"
+	@$(MAKE) --no-print-directory _echo_done
 
 push-force:
 	@$(MAKE) --no-print-directory _black
 	@$(MAKE) --no-print-directory _git_commit
 	@echo "\n⚙️  🚩FORCE🚩  pushing as $(_commit_name)\n"
 	@git push --force origin main
-	@echo "\n✅  done!"
+	@$(MAKE) --no-print-directory _echo_done
 
 _black:
 	@cd $(_path)
@@ -38,6 +38,9 @@ _stop-service:
 _start-service:
 	@systemctl --user restart $(app_name)
 	@echo "\n✅  service started\n"
+
+_echo_done:
+	@echo "\n✅  done!\n"
 
 setup:
 	@cd $(_path)
@@ -67,7 +70,7 @@ copy-service:
 	@echo "\n⚙️  managing service \n"
 	-@systemctl --user daemon-reload
 	-@systemctl --user enable $(app_name)
-	@echo "\n✅  done!"
+	@$(MAKE) --no-print-directory _echo_done
 
 cat-service:
 	@systemctl --user cat $(app_name)
