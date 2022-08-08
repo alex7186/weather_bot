@@ -1,5 +1,5 @@
 from datetime import datetime
-from back.lcd.drivers import CustomCharacters
+from back.i2c_dev import CustomCharacters
 
 from modules.base_screen_module import ScreenPatch, ScreenPatchModule
 from back.text_formater import shift_center, shift_left, shift_right

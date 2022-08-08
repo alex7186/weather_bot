@@ -11,10 +11,10 @@ from back.text_formater import (
 
 from modules.base_screen_module import ScreenPatch
 from back.text_formater import LCDScreen
-from back.lcd.drivers import Lcd, CustomCharacters
+from back.i2c_dev import Lcd, CustomCharacters
 
 
-def get_modules(CONFIG):
+def get_modules_data(CONFIG):
     """
     importing modules classes from modules '.py' files
     and creating class instances
@@ -53,7 +53,7 @@ def get_modules(CONFIG):
     return display, screen, modules_objects, screenpatch_collection
 
 
-def main(display, screen, modules_objects, screenpatch_collection):
+def execute_screen(display, screen, modules_objects, screenpatch_collection):
     """
     executing modules instances and updating the screen
     """
@@ -88,7 +88,7 @@ def update_screen(display: Lcd, unformated_text: str) -> None:
 
         display.lcd_display_extended_string(
             line,
-            i_row + 1,
+            i_row,
         )
 
 
@@ -97,4 +97,4 @@ if __name__ == "__main__":
     SCRIPT_PATH = "/".join(os.path.realpath(__file__).split("/")[:-1])
     CONFIG = get_config(SCRIPT_PATH)
 
-    main(*get_modules(CONFIG))
+    execute_screen(*get_modules_data(CONFIG))

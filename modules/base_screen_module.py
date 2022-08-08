@@ -1,5 +1,5 @@
 # from typing import NamedTuple
-from back.lcd.drivers import Lcd
+from back.i2c_dev import Lcd
 from back.text_formater import shift_center
 
 
