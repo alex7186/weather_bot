@@ -9,7 +9,7 @@ push:
 	@$(MAKE) --no-print-directory _black
 	@$(MAKE) --no-print-directory _git_commit
 	@echo "\n⚙️  pushing as $(_commit_name)\n"
-	# @git push origin main
+	@git push origin main
 	@$(MAKE) --no-print-directory _echo_done
 
 push-force:
