@@ -1,5 +1,5 @@
-_today =`date '+%Y-%m-%d  %H:%M:%S'`
-_commit_name = "autocommit $(_today)"
+_today =`date '+%Y-%m-%d_%H:%M:%S'`
+_commit_name = "autocommit_$(_today)"
 app_name = weather_bot
 _path = $(CURDIR)
 
