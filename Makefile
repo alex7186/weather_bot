@@ -50,7 +50,7 @@ setup:
 
 	@$(MAKE) --no-print-directory copy-service
 
-	@echo "\n✅ setup complete!"
+	@echo "\n✅ setup complete!\n"
 
 start-python:
 	python3.10 app.py
