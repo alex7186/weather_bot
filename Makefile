@@ -52,8 +52,10 @@ setup:
 
 	@echo "\n✅ setup complete!\n"
 
+	@$(MAKE) --no-print-directory start
+
 start-python:
-	python3.10 app.py
+	@python3.10 app.py
 
 status:
 	-@systemctl --user status $(app_name) | cat
