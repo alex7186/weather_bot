@@ -1,0 +1,1 @@
+sudo fbi -d /dev/fb0 -T 1 '/home/pi/scripts/weather_bot/notes/image.png'

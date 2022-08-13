@@ -7,10 +7,11 @@ from back.import_manager import import_modules, execute_modules
 from back.text_formater import (
     make_screenpatch_view,
     make_text_from_screenpatch_collection,
+    LCDScreen,
 )
+from back.print_manager import mprint
 
 from modules.base_screen_module import ScreenPatch
-from back.text_formater import LCDScreen
 from back.i2c_dev import Lcd, CustomCharacters
 
 
@@ -19,10 +20,14 @@ def get_modules_data(CONFIG):
     importing modules classes from modules '.py' files
     and creating class instances
     """
-    imported_modules = []
 
     # setting up the display
-    display = Lcd()
+    try:
+        display = Lcd()
+    except OSError:
+        mprint(CONFIG["APP_NAME"] + " " + f": OSError occured")
+        exit(1)
+
     screen = LCDScreen(
         lines_count=CONFIG["LINES_COUNT"], line_length=CONFIG["LINE_LENGTH"]
     )
@@ -49,6 +54,8 @@ def get_modules_data(CONFIG):
         custom_charecters=custom_charecters,
         screenpatch_collection=screenpatch_collection,
     )
+
+    mprint(CONFIG["APP_NAME"] + " " + f": App started")
 
     return display, screen, modules_objects, screenpatch_collection
 

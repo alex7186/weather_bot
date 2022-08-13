@@ -5,7 +5,7 @@
     "LINE_LENGTH" : 19,
 
     "GLOBAL_REFRASH_RATE" : 1,
-    "PRINT_SCREEN_IMAGE_TO_CONSOLE" : false,
+    "PRINT_SCREEN_IMAGE_TO_CONSOLE" : true,
 
     "modules_data": [
         {
