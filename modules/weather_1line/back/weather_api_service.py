@@ -7,8 +7,8 @@ import requests
 from urllib.error import URLError
 import json
 
-from modules.weather_1line.exceptions import ApiServiceError
-from modules.weather_1line.coordinates import Coordinates
+from modules.weather_1line.back.exceptions import ApiServiceError
+from modules.weather_1line.back.coordinates import Coordinates
 
 
 Celsius = int
@@ -87,7 +87,7 @@ def _parse_openweather_responce(openweather_responce: str) -> Weather:
 
 
 def _parse_temperature(openweather_dict: dict) -> Celsius:
-    return int(round(openweather_dict["main"]["temp"], 0))
+    return round(openweather_dict["main"]["temp"])
 
 
 def _parse_weather_type(openweather_dict: dict) -> WeatherType:

@@ -1,6 +1,6 @@
 from back.text_formater import LCDScreen
 
-from modules.weather_1line.weather_api_service import Weather
+from modules.weather_1line.back.weather_api_service import Weather
 from modules.base_screen_module import ScreenPatch
 
 from back.text_formater import shift_center, shift_left, shift_right
