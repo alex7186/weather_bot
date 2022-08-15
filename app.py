@@ -12,7 +12,7 @@ from back.text_converter import (
 from back.print_manager import mprint
 
 from modules.base_screen_module import ScreenPatch
-from back.i2c_dev import Lcd, CustomCharacters
+from back.i2c_manager import Lcd, CustomCharacters
 
 
 def get_modules_data(CONFIG):

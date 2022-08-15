@@ -5,7 +5,7 @@ from modules.sun_2line.back.weather_api_service import SunPeriods
 from modules.base_screen_module import ScreenPatch
 
 from back.text_converter import shift_center, shift_left, shift_right
-from back.i2c_dev import CustomCharacters
+from back.i2c_manager import CustomCharacters
 from back.custom_charecters_manager import reflect_hor, reflect_vert
 
 base_margin_left = 9

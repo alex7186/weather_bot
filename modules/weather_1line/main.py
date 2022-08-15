@@ -1,4 +1,4 @@
-from back.i2c_dev import CustomCharacters
+from back.i2c_manager import CustomCharacters
 from back.print_manager import mprint
 
 from modules.base_screen_module import ScreenPatch, ScreenPatchModule
