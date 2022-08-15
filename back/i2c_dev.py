@@ -107,12 +107,12 @@ class I2CDevice:
         """read a single byte"""
         return self.bus.read_byte(self.addr)
 
-    # read
     def read_data(self, cmd):
+        """read"""
         return self.bus.read_byte_data(self.addr, cmd)
 
-    # read a block of data
     def read_block_data(self, cmd):
+        """read a block of data"""
         return self.bus.read_block_data(self.addr, cmd)
 
 
