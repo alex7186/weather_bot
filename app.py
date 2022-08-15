@@ -20,6 +20,7 @@ def get_modules_data(CONFIG):
     importing modules classes from modules '.py' files
     and creating class instances
     """
+    mprint(CONFIG["APP_NAME"] + " " + f": Starting...")
 
     # setting up the display
     try:

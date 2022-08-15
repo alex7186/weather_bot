@@ -5,6 +5,11 @@ from re import findall, match
 from subprocess import check_output
 from os.path import exists
 
+
+class I2CDeviceError(Exception):
+    pass
+
+
 # old and new versions of the RPi have swapped the two i2c buses
 # they can be identified by RPI_REVISION (or check sysfs)
 BUS_NUMBER = 0 if RPI_REVISION == 1 else 1
@@ -90,30 +95,48 @@ class I2CDevice:
 
     def write_cmd(self, cmd):
         """write a single command"""
-        self.bus.write_byte(self.addr, cmd)
-        sleep(self.SLEEP_SHORT)
+        try:
+            self.bus.write_byte(self.addr, cmd)
+            sleep(self.SLEEP_SHORT)
+        except Exception:
+            raise I2CDeviceError
 
     def write_cmd_arg(self, cmd, data):
         """write a command and argument"""
-        self.bus.write_byte_data(self.addr, cmd, data)
-        sleep(self.SLEEP_SHORT)
+        try:
+            self.bus.write_byte_data(self.addr, cmd, data)
+            sleep(self.SLEEP_SHORT)
+        except Exception:
+            raise I2CDeviceError
 
     def write_block_data(self, cmd, data):
         """write a block of data"""
-        self.bus.write_block_data(self.addr, cmd, data)
-        sleep(self.SLEEP_SHORT)
+        try:
+            self.bus.write_block_data(self.addr, cmd, data)
+            sleep(self.SLEEP_SHORT)
+        except Exception:
+            raise I2CDeviceError
 
     def read(self):
         """read a single byte"""
-        return self.bus.read_byte(self.addr)
+        try:
+            return self.bus.read_byte(self.addr)
+        except Exception:
+            raise I2CDeviceError
 
     def read_data(self, cmd):
         """read"""
-        return self.bus.read_byte_data(self.addr, cmd)
+        try:
+            return self.bus.read_byte_data(self.addr, cmd)
+        except Exception:
+            raise I2CDeviceError
 
     def read_block_data(self, cmd):
         """read a block of data"""
-        return self.bus.read_block_data(self.addr, cmd)
+        try:
+            return self.bus.read_block_data(self.addr, cmd)
+        except Exception:
+            raise I2CDeviceError
 
 
 class Lcd:
