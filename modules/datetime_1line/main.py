@@ -39,6 +39,8 @@ class MainModule(ScreenPatchModule):
             line_length=self.screenpatch.line_length,
         )
 
+        cur_minute += 3
+
         res_text += shift_right(
             "{}:{}:{}".format(
                 cur_hour if cur_hour > 9 else "0" + str(cur_hour),
