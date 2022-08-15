@@ -4,7 +4,7 @@ import time
 
 from back.config_manager import get_config
 from back.import_manager import import_modules, execute_modules
-from back.text_formater import (
+from back.text_converter import (
     make_screenpatch_view,
     make_text_from_screenpatch_collection,
     LCDScreen,

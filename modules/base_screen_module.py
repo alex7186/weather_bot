@@ -1,8 +1,3 @@
-# from typing import NamedTuple
-from back.i2c_dev import Lcd
-from back.text_formater import shift_center
-
-
 class ScreenPatch:
     """Square space on the screen"""
 

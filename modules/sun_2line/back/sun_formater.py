@@ -1,10 +1,10 @@
 import json
-from back.text_formater import LCDScreen
+from back.text_converter import LCDScreen
 
 from modules.sun_2line.back.weather_api_service import SunPeriods
 from modules.base_screen_module import ScreenPatch
 
-from back.text_formater import shift_center, shift_left, shift_right
+from back.text_converter import shift_center, shift_left, shift_right
 from back.i2c_dev import CustomCharacters
 from back.custom_charecters_manager import reflect_hor, reflect_vert
 
