@@ -141,6 +141,8 @@ class I2CDevice:
 
 class Lcd:
     SLEEP_SHORT = 0.0001
+    SLEEP_MIDDLE = SLEEP_SHORT * 5
+    SLEEP_LONG = 0.2
 
     def __init__(self, addr=None):
 
@@ -155,12 +157,12 @@ class Lcd:
         self.lcd_write(LCD_CLEARDISPLAY)
         self.lcd_write(LCD_ENTRYMODESET | LCD_ENTRYLEFT)
 
-        sleep(0.2)
+        sleep(self.SLEEP_LONG)
 
     def lcd_strobe(self, data):
         """clocks EN to latch command"""
         self.lcd.write_cmd(data | En | LCD_BACKLIGHT)
-        sleep(0.0005)
+        sleep(self.SLEEP_MIDDLE)
         self.lcd.write_cmd(((data & ~En) | LCD_BACKLIGHT))
         sleep(self.SLEEP_SHORT)
 
