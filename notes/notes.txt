@@ -1,1 +1,12 @@
 sudo fbi -d /dev/fb0 -T 1 '/home/pi/scripts/weather_bot/notes/image.png'
+
+change driver default CC generation to deep copy or 
+[0b11111,
+ 0b10101,
+ 0b10101,
+ 0b11111,
+ 0b00100,
+ 0b00100,
+ 0b00100,
+ 0b00000]
+
