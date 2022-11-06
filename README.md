@@ -6,7 +6,7 @@ to insert telegram bot key:
 1) go to file <br>
 `<PATH_TO_PROJET_DIR>/misc/config.json`
 
-2) put your openweather api key from https://openweathermap.org/ and edit following line: 
+2) put your openweather api key from https://openweathermap.org/ and edit following line: <br>
     `"OPENWEATHER_API_KEY" : `<br>
     `"<YOUR_OPENWEATHER_API_KEY>".`
 
