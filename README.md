@@ -1,5 +1,15 @@
 # weather_bot
 
+this program is built on asynchronous modules that display (connected to the raspberryPI via I2S) information about the 
+* current date
+* current time
+* weather
+* sunrise and sunset times
+
+output to the display is carried out using libraries for interaction with i2C
+
+the program itself is launched using the user's systemd service
+
 # Setting configuration
 to insert telegram bot key:
 
