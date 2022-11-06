@@ -14,6 +14,12 @@ to insert telegram bot key:
     `"LINE_LENGTH" : <YOUR_SCREEN_LINE_LENGTH - 1>,`
 
 # Setup
+
+
+after the following commands, this script will install the necessary libraries for working with the I2C interface and for interacting with the Internet
+
+---
+
 you need to connect your [display with i2c adapter](https://aliexpress.ru/item/1005001853905593.html?spm=a2g2w.productlist.search_results.1.13db1172pTCxgm&sku_id=12000017862865136) to RPi:
 * display `SDA` -> GPIO 2
 * display `SCL` -> GPIO 3
@@ -24,8 +30,8 @@ you need to connect your [display with i2c adapter](https://aliexpress.ru/item/1
 
 run following commands to put the systemd service to the right place, make systemctl stuff, download dependencies and get things ready to run:
 
-`cd <PATH_TO_PROJECT_DIR>`<br>
-`make setup`
+    cd <PATH_TO_PROJECT_DIR>
+    make setup
 
 # Screen modules
 each module is in its own folder inside the modules directory and has a main.py file.
@@ -40,3 +46,27 @@ each module is entered into a 'config.json' file in the 'modules_data' section a
 * `rows`, `columns_start`, `columns_stop` - locates the module screen area (ScreenPatch)
 
 
+---
+**NOTE**
+
+This script updates your Raspberry Pi OS !!! If you don't want to update the OS DO NOT USE THIS SCRIPT!
+
+---
+
+# Thanks to / Credits
+
+* [script for python3.10 simple installation](https://github.com/tvdsluijs/sh-python-installer)
+
+# License & Copyrights
+
+Copyright (c) 2022 [itheo.tech](https://itheo.tech/) / Theo van der Sluijs
+
+# MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Get your copy of the [MIT](https://choosealicense.com/licenses/mit/) License.
