@@ -1,2 +1,5 @@
 python-crontab==2.6.0
 black==22.3.0
+smbus==1.1.post2
+RPi.GPIO==0.7.1
+requests==2.28.1

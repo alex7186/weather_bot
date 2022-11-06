@@ -12,7 +12,7 @@ from back.text_converter import (
 from back.print_manager import mprint
 
 from modules.base_screen_module import ScreenPatch
-from back.i2c_manager import Lcd, CustomCharacters
+from back.i2c_manager import Lcd, CustomCharacters, I2CDeviceError
 
 
 def get_modules_data(CONFIG):
@@ -92,12 +92,16 @@ def update_screen(display: Lcd, unformated_text: str) -> None:
     updating the screen with modules text data
     """
 
-    for i_row, line in enumerate(unformated_text):
+    try:
+        for i_row, line in enumerate(unformated_text):
 
-        display.lcd_display_extended_string(
-            line,
-            i_row,
-        )
+            display.lcd_display_extended_string(
+                line,
+                i_row,
+            )
+    except I2CDeviceError:
+        mprint(CONFIG["APP_NAME"] + " " + "get I2CDeviceError")
+        time.sleep(5)
 
 
 if __name__ == "__main__":

@@ -45,8 +45,13 @@ _echo_done:
 setup:
 	@cd $(_path)
 	@echo "\n📝  installing dependencies...\n"
+	@wget -qO - https://raw.githubusercontent.com/tvdsluijs/sh-python-installer/main/python.sh | sudo bash -s 3.10.0
+
 	@pip3.10 install -r ./misc/requirements.txt
 	@sudo apt-get install python3-systemd
+	@sudo apt-get install python3-dev python3-rpi.gpio
+	@sudo apt-get install i2c-tools
+	@sudo apt-get install git
 
 	@$(MAKE) --no-print-directory copy-service
 
@@ -68,6 +73,7 @@ start:
 
 copy-service:
 	@echo "\n⚙️  moving service to $(_service-path)\n"
+	@mkdir -p $(_service-path)
 	@sudo cp $(_path)/service/$(app_name).service $(_service-path)/$(app_name).service
 	@echo "\n⚙️  managing service \n"
 	-@systemctl --user daemon-reload
