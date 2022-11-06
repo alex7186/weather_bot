@@ -1,6 +1,6 @@
 # weather_bot
 
-this program is built on asynchronous modules that display (connected to the raspberryPI via I2S) information about the 
+this program is built on asynchronous modules that display (connected to the raspberryPI via I2C) information about the 
 * current date
 * current time
 * weather
@@ -19,6 +19,8 @@ to insert telegram bot key:
 2) put your openweather api key from https://openweathermap.org/ and edit following line: <br>
     `"OPENWEATHER_API_KEY" : `<br>
     `"<YOUR_OPENWEATHER_API_KEY>".`
+
+    (but if you don't feel like it, you can use my key)
 
 3) put your screen parameters to the lines below:<br>
     `"LINES_COUNT"` :<br> 
