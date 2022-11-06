@@ -7,11 +7,14 @@ to insert telegram bot key:
 `<PATH_TO_PROJET_DIR>/misc/config.json`
 
 2) put your openweather api key from https://openweathermap.org/ and edit following line: 
-    `"OPENWEATHER_API_KEY" : "<YOUR_OPENWEATHER_API_KEY>".`
+    `"OPENWEATHER_API_KEY" : `<br>
+    `"<YOUR_OPENWEATHER_API_KEY>".`
 
-3) put your screen parameters to the lines below:
-    `"LINES_COUNT" : <YOUR_SCREEN_LINES_COUNT>,`
-    `"LINE_LENGTH" : <YOUR_SCREEN_LINE_LENGTH - 1>,`
+3) put your screen parameters to the lines below:<br>
+    `"LINES_COUNT"` :<br> 
+        `<YOUR_SCREEN_LINES_COUNT>,`<br>
+    `"LINE_LENGTH" : `<br>
+        `<YOUR_SCREEN_LINE_LENGTH - 1>,`
 
 # Setup
 
