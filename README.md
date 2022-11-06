@@ -10,6 +10,13 @@ output to the display is carried out using libraries for interaction with i2C
 
 the program itself is launched using the user's systemd service
 
+---
+**NOTE**
+
+This script updates your Raspberry Pi OS !!! If you don't want to update the OS DO NOT USE THIS SCRIPT!
+
+---
+
 # Setting configuration
 to insert telegram bot key:
 
@@ -17,16 +24,13 @@ to insert telegram bot key:
 `<PATH_TO_PROJET_DIR>/misc/config.json`
 
 2) put your openweather api key from https://openweathermap.org/ and edit following line: <br>
-    `"OPENWEATHER_API_KEY" : `<br>
-    `"<YOUR_OPENWEATHER_API_KEY>".`
+    `"OPENWEATHER_API_KEY" : "<YOUR_OPENWEATHER_API_KEY>".`
 
     (but if you don't feel like it, you can use my key)
 
 3) put your screen parameters to the lines below:<br>
-    `"LINES_COUNT"` :<br> 
-        `<YOUR_SCREEN_LINES_COUNT>,`<br>
-    `"LINE_LENGTH" : `<br>
-        `<YOUR_SCREEN_LINE_LENGTH - 1>,`
+    `"LINES_COUNT" : <YOUR_SCREEN_LINES_COUNT>,`<br>
+    `"LINE_LENGTH" : <YOUR_SCREEN_LINE_LENGTH - 1>,`
 
 # Setup
 
@@ -48,7 +52,7 @@ run following commands to put the systemd service to the right place, make syste
     cd <PATH_TO_PROJECT_DIR>
     make setup
 
-# Screen modules
+# More about screen modules
 each module is in its own folder inside the modules directory and has a main.py file.
 
 inside main.py, each module contains class with method: <br>
@@ -61,12 +65,7 @@ each module is entered into a 'config.json' file in the 'modules_data' section a
 * `rows`, `columns_start`, `columns_stop` - locates the module screen area (ScreenPatch)
 
 
----
-**NOTE**
 
-This script updates your Raspberry Pi OS !!! If you don't want to update the OS DO NOT USE THIS SCRIPT!
-
----
 
 # Thanks to / Credits
 
