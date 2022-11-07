@@ -1,5 +1,5 @@
 [Unit]
-Description=weather_bot
+Description=weather_bot_common
 Wants=network-online.target
 After=network-online.target
 
@@ -12,4 +12,4 @@ RestartSec=3
 StandardOutput=journal+console
 
 [Install]
-WantedBy=basic.target
+WantedBy=multi-user.target

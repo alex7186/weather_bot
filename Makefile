@@ -3,7 +3,6 @@ _commit_name = "autocommit_$(_today)"
 app_name = weather_bot
 _path = $(CURDIR)
 
-_service-path = ~/.config/systemd/user
 _common-service-path = /etc/systemd/system/
 
 push:
@@ -32,20 +31,12 @@ _git_commit:
 	-@git commit -m $(_commit_name)
 
 _stop-service:
-	-@systemctl --user stop $(app_name)
+	-@sudo systemctl stop $(app_name)
 	@echo "\n❌  service stopped\n"
 
-_stop-common-service:
-	-@sudo systemctl stop $(app_name)_common
-	@echo "\n❌  common service stopped\n"
-
 _start-service:
-	@systemctl --user restart $(app_name)
+	@sudo systemctl restart $(app_name)
 	@echo "\n✅  service started\n"
-
-_start-common-service:
-	@sudo systemctl restart $(app_name)_common
-	@echo "\n✅  common service started\n"
 
 _echo_done:
 	@echo "\n✅  done!\n"
@@ -71,43 +62,23 @@ start-python:
 	@python3.10 app.py
 
 status:
-	-@systemctl --user status $(app_name) | cat
-
-status-common:
-	-@sudo systemctl status $(app_name)_common | cat
+	-@sudo systemctl status $(app_name) | cat
 
 stop:
 	@$(MAKE) --no-print-directory _stop-service
 
-stop-common:
-	@$(MAKE) --no-print-directory _stop-common-service
-
 start:
 	@$(MAKE) --no-print-directory _start-service
 
-start-common:
-	@$(MAKE) --no-print-directory _start-common-service
 
 copy-service:
-	@echo "\n⚙️  moving service to $(_service-path)\n"
-	@mkdir -p $(_service-path)
-	@sudo cp $(_path)/service/$(app_name).service $(_service-path)/$(app_name).service
-	@echo "\n⚙️  managing service \n"
-	-@systemctl --user daemon-reload
-	-@systemctl --user enable $(app_name)
-	@$(MAKE) --no-print-directory _echo_done
-
-
-copy-common-service:
 	@echo "\n⚙️  moving service to $(_common-service-path)\n"
 	@# @mkdir -p $(_common-service-path)
-	@sudo cp $(_path)/service/$(app_name)_common.service $(_common-service-path)/$(app_name)_common.service
+	@sudo cp $(_path)/service/$(app_name).service $(_common-service-path)/$(app_name).service
 	@echo "\n⚙️  managing service \n"
 	-@sudo systemctl daemon-reload
-	-@sudo systemctl enable $(app_name)_common
+	-@sudo systemctl enable $(app_name)
 	@$(MAKE) --no-print-directory _echo_done
-
-
 
 
 cat-service:
