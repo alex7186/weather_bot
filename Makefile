@@ -4,6 +4,7 @@ app_name = weather_bot
 _path = $(CURDIR)
 
 _service-path = ~/.config/systemd/user
+_common-service-path = /etc/systemd/system/
 
 push:
 	@$(MAKE) --no-print-directory _black
@@ -34,10 +35,17 @@ _stop-service:
 	-@systemctl --user stop $(app_name)
 	@echo "\n❌  service stopped\n"
 
+_stop-common-service:
+	-@sudo systemctl stop $(app_name)_common
+	@echo "\n❌  common service stopped\n"
 
 _start-service:
 	@systemctl --user restart $(app_name)
 	@echo "\n✅  service started\n"
+
+_start-common-service:
+	@sudo systemctl restart $(app_name)_common
+	@echo "\n✅  common service started\n"
 
 _echo_done:
 	@echo "\n✅  done!\n"
@@ -65,11 +73,20 @@ start-python:
 status:
 	-@systemctl --user status $(app_name) | cat
 
+status-common:
+	-@sudo systemctl status $(app_name)_common | cat
+
 stop:
 	@$(MAKE) --no-print-directory _stop-service
 
+stop-common:
+	@$(MAKE) --no-print-directory _stop-common-service
+
 start:
 	@$(MAKE) --no-print-directory _start-service
+
+start-common:
+	@$(MAKE) --no-print-directory _start-common-service
 
 copy-service:
 	@echo "\n⚙️  moving service to $(_service-path)\n"
@@ -79,6 +96,19 @@ copy-service:
 	-@systemctl --user daemon-reload
 	-@systemctl --user enable $(app_name)
 	@$(MAKE) --no-print-directory _echo_done
+
+
+copy-common-service:
+	@echo "\n⚙️  moving service to $(_common-service-path)\n"
+	@# @mkdir -p $(_common-service-path)
+	@sudo cp $(_path)/service/$(app_name)_common.service $(_common-service-path)/$(app_name)_common.service
+	@echo "\n⚙️  managing service \n"
+	-@sudo systemctl daemon-reload
+	-@sudo systemctl enable $(app_name)_common
+	@$(MAKE) --no-print-directory _echo_done
+
+
+
 
 cat-service:
 	@systemctl --user cat $(app_name)

@@ -1,0 +1,15 @@
+[Unit]
+Description=weather_bot_common
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/bin/sh /home/pi/scripts/weather_bot/service/starter.sh
+WorkingDirectory=/home/pi/scripts/weather_bot
+Restart=always
+RestartSec=3
+StandardOutput=journal+console
+
+[Install]
+WantedBy=multi-user.target
