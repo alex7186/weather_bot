@@ -12,10 +12,25 @@ def format_weather(weather: Weather, screenpatch: ScreenPatch) -> str:
     """Formats weather data in string"""
 
     def format_weather_type(weather: Weather, screenpatch: ScreenPatch):
+        def format_temperature(temperature: int) -> str:
+            res = "!E"
+            if temperature >= 0:
+                res = "+" + str(temperature)
+            else:
+                res = str(temperature)
+
+            return res
 
         result = ""
         result += " ".join(
-            map(str, (weather.weather_type.value, weather.temperature, "C"))
+            map(
+                str,
+                (
+                    weather.weather_type.value,
+                    format_temperature(weather.temperature),
+                    "C",
+                ),
+            )
         )
 
         return shift_center(
