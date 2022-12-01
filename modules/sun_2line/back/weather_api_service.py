@@ -1,22 +1,24 @@
-from typing import Literal, NamedTuple
+from typing import NamedTuple
 from typing import NamedTuple
 from datetime import datetime
-from enum import Enum
+
 import ssl
 import requests
 from urllib.error import URLError
 import json
+
+from back.print_manager import mprint
 
 from modules.sun_2line.back.exceptions import ApiServiceError
 from modules.sun_2line.back.coordinates import Coordinates
 
 
 class SunPeriods(NamedTuple):
-    sunrise: datetime = datetime.now()
-    sunset: datetime = datetime.now()
+    sunrise: datetime = datetime(year=1970, month=1, day=1, hour=0, minute=0)
+    sunset: datetime = datetime(year=1970, month=1, day=1, hour=0, minute=0)
 
 
-def get_sun(coords: Coordinates, CONFIG: dict) -> SunPeriods:
+def get_sun(coordinates: Coordinates, CONFIG: dict) -> SunPeriods:
     """Requests weather in OpenWeather Api and returns it"""
 
     OPENWEATHER_URL = (
@@ -28,14 +30,16 @@ def get_sun(coords: Coordinates, CONFIG: dict) -> SunPeriods:
 
     try:
         openweather_responce = _get_openweather_responce(
-            latitude=coords.latitude,
-            longitude=coords.longitude,
+            latitude=coordinates.latitude,
+            longitude=coordinates.longitude,
             OPENWEATHER_URL=OPENWEATHER_URL,
         )
         weather = _parse_openweather_responce(openweather_responce)
-        return weather
     except Exception:
-        raise ApiServiceError(f"Не удалось получить погоду по координатам {coords}")
+        mprint(f"Не удалось получить данные солнца по координатам {coordinates}")
+        weather = SunPeriods()
+
+    return weather
 
 
 def _get_openweather_responce(
@@ -45,7 +49,7 @@ def _get_openweather_responce(
     url = OPENWEATHER_URL.format(latitude=latitude, longitude=longitude)
 
     try:
-        return requests.get(url)
+        return requests.get(url, timeout=4)
 
     except URLError:
         raise ApiServiceError

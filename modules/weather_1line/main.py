@@ -9,17 +9,6 @@ from modules.weather_1line.back.coordinates import Coordinates, get_coords
 from modules.weather_1line.back.exceptions import ApiServiceError, CantGetCoordinates
 
 
-def get_weather_safe(coordinates: Coordinates, CONFIG: dict):
-    try:
-        weather = get_weather(coordinates, CONFIG)
-    except ApiServiceError as e:
-        mprint(f"Не удалось получить погоду по координатам {coordinates}")
-        weather = Weather()
-        exit(1)
-
-    return weather
-
-
 class MainModule(ScreenPatchModule):
     def __init__(
         self,
@@ -43,7 +32,7 @@ class MainModule(ScreenPatchModule):
         except CantGetCoordinates:
             mprint("Не удалось получить GPS координаты")
 
-        weather = get_weather_safe(coordinates, self.CONFIG)
+        weather = get_weather(coordinates, self.CONFIG)
 
         res_text = format_weather(weather, self.screenpatch)
 

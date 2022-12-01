@@ -45,8 +45,21 @@ def import_modules(
     return modules_objects
 
 
+def custom_exception_handler(loop, context):
+    # first, handle with default handler
+    loop.default_exception_handler(context)
+
+    exception = context.get("exception")
+    if isinstance(exception, ZeroDivisionError):
+        mprint(context)
+        loop.stop()
+        # loop.close()
+
+
 def execute_modules(modules_objects: list) -> list:
     modules_execute_event_loop = asyncio.new_event_loop()
+    modules_execute_event_loop.set_exception_handler(custom_exception_handler)
+
     tasks = []
     for module_object in modules_objects:
 
@@ -58,6 +71,8 @@ def execute_modules(modules_objects: list) -> list:
     wait_tasks = asyncio.wait(tasks)
 
     modules_res = modules_execute_event_loop.run_until_complete(wait_tasks)
-    modules_execute_event_loop.close()
+
+    # modules_execute_event_loop.stop()
+    # modules_execute_event_loop.close()
 
     return modules_res

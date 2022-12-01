@@ -10,6 +10,8 @@ import json
 from modules.weather_1line.back.exceptions import ApiServiceError
 from modules.weather_1line.back.coordinates import Coordinates
 
+from back.print_manager import mprint
+
 
 Celsius = int
 
@@ -28,11 +30,9 @@ class WeatherType(Enum):
 class Weather(NamedTuple):
     temperature: Celsius = 0
     weather_type: WeatherType = WeatherType.NONE
-    # sunrise: datetime = datetime.now()
-    # sunset: datetime = datetime.now()
 
 
-def get_weather(coords: Coordinates, CONFIG: dict) -> Weather:
+def get_weather(coordinates: Coordinates, CONFIG: dict) -> Weather:
     """Requests weather in OpenWeather Api and returns it"""
 
     OPENWEATHER_URL = (
@@ -44,14 +44,17 @@ def get_weather(coords: Coordinates, CONFIG: dict) -> Weather:
 
     try:
         openweather_responce = _get_openweather_responce(
-            latitude=coords.latitude,
-            longitude=coords.longitude,
+            latitude=coordinates.latitude,
+            longitude=coordinates.longitude,
             OPENWEATHER_URL=OPENWEATHER_URL,
         )
         weather = _parse_openweather_responce(openweather_responce)
-        return weather
+
     except Exception:
-        raise ApiServiceError(f"Не удалось получить погоду по координатам {coords}")
+        mprint(f"Не удалось получить погодные данные по координатам {coordinates}")
+        weather = Weather()
+
+    return weather
 
 
 def _get_openweather_responce(
@@ -61,7 +64,7 @@ def _get_openweather_responce(
     url = OPENWEATHER_URL.format(latitude=latitude, longitude=longitude)
 
     try:
-        return requests.get(url)
+        return requests.get(url, timeout=4)
 
     except URLError:
         raise ApiServiceError
@@ -75,14 +78,10 @@ def _parse_openweather_responce(openweather_responce: str) -> Weather:
 
     temperature = _parse_temperature(openweather_dict)
     weather_type = _parse_weather_type(openweather_dict)
-    # sunset = _parse_suntime(openweather_dict, "sunset")
-    # sunrise = _parse_suntime(openweather_dict, "sunrise")
 
     return Weather(
         temperature=temperature,
         weather_type=weather_type,
-        # sunset=sunset,
-        # sunrise=sunrise,
     )
 
 
@@ -113,9 +112,3 @@ def _parse_weather_type(openweather_dict: dict) -> WeatherType:
             return _weather_type
 
     raise ApiServiceError(f"illegal {weather_type_id=}")
-
-
-def _parse_suntime(
-    openweather_dict: dict, time  #: Literal["sunrise"] | Literal["sunset"]
-) -> datetime:
-    return datetime.fromtimestamp(openweather_dict["sys"][time])

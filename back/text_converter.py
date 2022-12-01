@@ -77,7 +77,7 @@ def make_screenpatch_view(
         modules_objects=modules_objects,
     )
 
-    s = ""
+    s = "\n"
     s += "╭" + (screen.line_length + 1) * "―" + "╮" + "\n"
     for line in unformated_text:
         line_clean = line[:]
