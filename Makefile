@@ -36,7 +36,7 @@ _stop-service:
 
 _start-service:
 	@sudo systemctl restart $(app_name)
-	@echo "\n✅  service started\n"
+	@echo "\n✅  service (re)started\n"
 
 _echo_done:
 	@echo "\n✅  done!\n"

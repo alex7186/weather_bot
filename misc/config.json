@@ -17,7 +17,7 @@
         },
         {
             "name" : "sun_2line",
-            "refrash_skip_rate" : 20000,
+            "refrash_skip_rate" : 3600,
             "rows" : [2, 3],
             "columns_start" : 0,
             "columns_stop" : 19
