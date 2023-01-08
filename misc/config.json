@@ -24,7 +24,7 @@
         },
         {
             "name" : "weather_1line",
-            "refrash_skip_rate" : 600,
+            "refrash_skip_rate" : 1800,
             "rows" : [1],
             "columns_start" : 0,
             "columns_stop" : 19   
