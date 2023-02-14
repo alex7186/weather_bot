@@ -1,6 +1,5 @@
-from typing import Literal, NamedTuple
 from typing import NamedTuple
-from datetime import datetime
+from typing import NamedTuple
 from enum import Enum
 import ssl
 import requests
