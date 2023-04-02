@@ -1,7 +1,13 @@
 from typing import NamedTuple
 from subprocess import Popen, PIPE
 
-from modules.weather_1line.back.exceptions import CantGetCoordinates
+from back.print_manager import mprint
+
+
+class CantGetCoordinates(Exception):
+    """Program can't get current GPS coordinates"""
+
+    pass
 
 
 class Coordinates(NamedTuple):
@@ -41,4 +47,7 @@ def get_coords() -> Coordinates:
     # whereami_output = execute_whereami()
 
     # return clear_whereami_output(whereami_output)
-    return Coordinates(55.3955, 37.2839)
+    try:
+        return Coordinates(55.3955, 37.2839)
+    except CantGetCoordinates:
+        mprint("Не удалось получить GPS координаты")

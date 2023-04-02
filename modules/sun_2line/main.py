@@ -1,11 +1,9 @@
 from back.i2c_manager import CustomCharacters
-
+from back.coords_manager import get_coords
+from back.weather_mananger import get_weather
 
 from modules.base_screen_module import ScreenPatch, ScreenPatchModule
-
 from modules.sun_2line.back.sun_formater import format_sun
-from modules.sun_2line.back.weather_api_service import get_sun
-from modules.sun_2line.back.coordinates import get_coords
 
 
 class MainModule(ScreenPatchModule):
@@ -30,6 +28,8 @@ class MainModule(ScreenPatchModule):
 
         coordinates = get_coords()
 
-        sun_periods = get_sun(coordinates, self.CONFIG)
+        _, sun_periods = get_weather(coordinates, self.CONFIG)
 
-        return format_sun(sun_periods, self.screenpatch, self.custom_charecters)
+        res_text = format_sun(sun_periods, self.screenpatch, self.custom_charecters)
+
+        return res_text

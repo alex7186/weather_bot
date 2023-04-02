@@ -1,18 +1,22 @@
 from typing import NamedTuple
-from typing import NamedTuple
 from enum import Enum
 import ssl
 import requests
 from urllib.error import URLError
 import json
+from datetime import datetime
 
-from modules.weather_1line.back.exceptions import ApiServiceError
-from modules.weather_1line.back.coordinates import Coordinates
-
+from back.coords_manager import Coordinates
 from back.print_manager import mprint
 
 
 Celsius = int
+
+
+class ApiServiceError(Exception):
+    """Program can't connect to API"""
+
+    pass
 
 
 class WeatherType(Enum):
@@ -31,12 +35,18 @@ class Weather(NamedTuple):
     weather_type: WeatherType = WeatherType.NONE
 
 
-def get_weather(coordinates: Coordinates, CONFIG: dict) -> Weather:
+class SunPeriods(NamedTuple):
+    sunrise: datetime = datetime(year=1970, month=1, day=1, hour=0, minute=0)
+    sunset: datetime = datetime(year=1970, month=1, day=1, hour=0, minute=0)
+
+
+def get_weather(coordinates: Coordinates, CONFIG: dict):
     """Requests weather in OpenWeather Api and returns it"""
 
     OPENWEATHER_URL = (
         "https://api.openweathermap.org/data/2.5/"
-        + "weather?lat={latitude}&lon={longitude}&units=metric&appid="
+        + "weather?lat={latitude}&lon={longitude}"
+        + "&units=metric&appid="
         + CONFIG["OPENWEATHER_API_KEY"]
         + "&exclude=daily"
     )
@@ -47,13 +57,22 @@ def get_weather(coordinates: Coordinates, CONFIG: dict) -> Weather:
             longitude=coordinates.longitude,
             OPENWEATHER_URL=OPENWEATHER_URL,
         )
-        weather = _parse_openweather_responce(openweather_responce)
+        data = _parse_openweather_responce(openweather_responce)
+
+        return (
+            Weather(
+                temperature=data["temperature"],
+                weather_type=data["weather_type"],
+            ),
+            SunPeriods(
+                sunset=data["sunset"],
+                sunrise=data["sunrise"],
+            ),
+        )
 
     except Exception:
         mprint(f"Не удалось получить погодные данные по координатам {coordinates}")
-        weather = Weather()
-
-    return weather
+        return (Weather(), SunPeriods())
 
 
 def _get_openweather_responce(
@@ -70,6 +89,11 @@ def _get_openweather_responce(
 
 
 def _parse_openweather_responce(openweather_responce: str) -> Weather:
+    def _parse_suntime(
+        openweather_dict: dict, time  #: Literal["sunrise"] | Literal["sunset"]
+    ) -> datetime:
+        return datetime.fromtimestamp(openweather_dict["sys"][time])
+
     try:
         openweather_dict = json.loads(openweather_responce.text)
     except json.JSONDecodeError:
@@ -77,11 +101,15 @@ def _parse_openweather_responce(openweather_responce: str) -> Weather:
 
     temperature = _parse_temperature(openweather_dict)
     weather_type = _parse_weather_type(openweather_dict)
+    sunset = _parse_suntime(openweather_dict, "sunset")
+    sunrise = _parse_suntime(openweather_dict, "sunrise")
 
-    return Weather(
-        temperature=temperature,
-        weather_type=weather_type,
-    )
+    return {
+        "temperature": temperature,
+        "weather_type": weather_type,
+        "sunset": sunset,
+        "sunrise": sunrise,
+    }
 
 
 def _parse_temperature(openweather_dict: dict) -> Celsius:

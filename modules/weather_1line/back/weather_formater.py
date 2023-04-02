@@ -1,9 +1,9 @@
 from back.text_converter import LCDScreen
+from back.weather_mananger import Weather
+from back.text_converter import shift_center, shift_left, shift_right
 
-from modules.weather_1line.back.weather_api_service import Weather
 from modules.base_screen_module import ScreenPatch
 
-from back.text_converter import shift_center, shift_left, shift_right
 
 base_margin_left = 9
 
