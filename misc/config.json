@@ -16,18 +16,18 @@
             "columns_stop" : 19
         },
         {
-            "name" : "sun_2line",
-            "refrash_skip_rate" : 1800,
-            "rows" : [2, 3],
-            "columns_start" : 0,
-            "columns_stop" : 19
-        },
-        {
             "name" : "weather_1line",
             "refrash_skip_rate" : 1800,
             "rows" : [1],
             "columns_start" : 0,
             "columns_stop" : 19   
+        },
+        {
+            "name" : "sun_2line",
+            "refrash_skip_rate" : 1800,
+            "rows" : [2, 3],
+            "columns_start" : 0,
+            "columns_stop" : 19
         }
     ]
 }
