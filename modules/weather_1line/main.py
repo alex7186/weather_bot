@@ -1,6 +1,6 @@
 from back.i2c_manager import CustomCharacters
 from back.coords_manager import get_coords
-from back.weather_mananger import get_weather
+from back.cache_mananger import get_weather
 
 from modules.base_screen_module import ScreenPatch, ScreenPatchModule
 from modules.weather_1line.back.weather_formater import format_weather

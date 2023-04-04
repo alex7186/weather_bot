@@ -48,18 +48,18 @@ def get_weather(coordinates: Coordinates, CONFIG: dict):
         with open("misc/weather_cache.txt", "wb") as file:
             current_time = datetime.now()
             pickle.dump((current_time, data), file)
-            print(f"dumping {data} at {current_time}")
+            mprint(f"cache_manager: dumping cache with timestamp {current_time}")
 
     def read_cache():
         with open("misc/weather_cache.txt", "rb") as file:
-            return pickle.load(file)
+            data = pickle.load(file)
+            current_time = datetime.now()
+            mprint(f"cache_manager: loading cache with timestamp {data[0]}")
+            return data
 
     OPENWEATHER_URL = (
-        "https://api.openweathermap.org/data/2.5/"
-        + "weather?lat={latitude}&lon={longitude}"
-        + "&units=metric&appid="
-        + CONFIG["OPENWEATHER_API_KEY"]
-        + "&exclude=daily"
+        "https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}"
+        + f'&units=metric&appid={CONFIG["OPENWEATHER_API_KEY"]}&exclude=daily'
     )
 
     cache = read_cache()
@@ -111,7 +111,7 @@ def _get_openweather_responce(
         raise ApiServiceError
 
 
-def _parse_openweather_responce(openweather_responce: str) -> Weather:
+def _parse_openweather_responce(openweather_responce: str) -> dict:
     def _parse_suntime(openweather_dict: dict, time) -> datetime:
         return datetime.fromtimestamp(openweather_dict["sys"][time])
 
