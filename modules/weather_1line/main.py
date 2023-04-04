@@ -1,4 +1,4 @@
-from back.i2c_manager import CustomCharacters
+from back.custom_charecters_manager import CustomCharacters
 from back.coords_manager import get_coords
 from back.cache_mananger import get_weather
 
@@ -20,6 +20,7 @@ class MainModule(ScreenPatchModule):
         )
         self.refrash_skip_rate = refrash_skip_rate
         self.execution_count = 0
+        self.custom_charecters = custom_charecters
 
         self.CONFIG = CONFIG
 
@@ -28,6 +29,6 @@ class MainModule(ScreenPatchModule):
 
         weather, _ = get_weather(coordinates, self.CONFIG)
 
-        res_text = format_weather(weather, self.screenpatch)
+        res_text = format_weather(weather, self.screenpatch, self.custom_charecters)
 
         return res_text

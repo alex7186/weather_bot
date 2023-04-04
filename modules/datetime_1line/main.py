@@ -1,8 +1,9 @@
 from datetime import datetime
-from back.i2c_manager import CustomCharacters
+
+from back.custom_charecters_manager import CustomCharacters
+from back.text_converter import shift_center, shift_left, shift_right
 
 from modules.base_screen_module import ScreenPatch, ScreenPatchModule
-from back.text_converter import shift_center, shift_left, shift_right
 
 
 class MainModule(ScreenPatchModule):

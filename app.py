@@ -10,9 +10,10 @@ from back.text_converter import (
     LCDScreen,
 )
 from back.print_manager import mprint
+from back.custom_charecters_manager import CustomCharacters
+from back.i2c_manager import Lcd, I2CDeviceError
 
 from modules.base_screen_module import ScreenPatch
-from back.i2c_manager import Lcd, CustomCharacters, I2CDeviceError
 
 
 def get_modules_data(CONFIG):

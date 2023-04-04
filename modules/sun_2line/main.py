@@ -1,4 +1,4 @@
-from back.i2c_manager import CustomCharacters
+from back.custom_charecters_manager import CustomCharacters
 from back.coords_manager import get_coords
 from back.cache_mananger import get_weather
 
