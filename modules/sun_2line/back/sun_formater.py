@@ -3,6 +3,7 @@ import json
 from back.cache_mananger import SunPeriods
 from back.text_converter import shift_center
 from back.i2c_manager import CustomCharacters
+from back.custom_charecters_manager import reflect_vert, reflect_hor
 
 from modules.base_screen_module import ScreenPatch
 
@@ -18,37 +19,33 @@ def format_sun(
     """Formats weather data in string"""
 
     with open(f"misc/custom_chars.json", "r") as f:
-        res = json.load(f)
+        chars = json.load(f)
 
-        arrow_up = res["arrow_up"]
-        sun_1 = res["sun_1"]
-
-    sun_custom_charecters = {"arrow_up": arrow_up, "sun_1": sun_1}
-
-    for i, custom_char in enumerate(sun_custom_charecters.values()):
-        custom_charecters.chars_list[i] = custom_char
+    symbols_adress_list = [
+        # custom_charecters.append(chars["arrow_up"]),
+        # custom_charecters.append(reflect_vert(chars["arrow_up"])),
+        # custom_charecters.append(chars["sun_1"]),
+        custom_charecters.append(chars["sun_top_l"]),
+        custom_charecters.append(reflect_hor(chars["sun_top_l"])),
+        custom_charecters.append(reflect_vert(chars["sun_top_l"])),
+        custom_charecters.append(reflect_hor(reflect_vert(chars["sun_top_l"]))),
+    ]
 
     custom_charecters.load_custom_characters_data()
 
-    custom_charecters_adresses = {"arrow_up": "{0x00}", "sun_1": "{0x01}"}
-
-    result = []
-
-    result.append(
+    result = (
         shift_center(
-            f'{custom_charecters_adresses["arrow_up"]}'
-            + " "
-            + f"{sun_periods.sunset.strftime('%H:%M')}",
+            symbols_adress_list[0]
+            + symbols_adress_list[1]
+            + f" {sun_periods.sunset.strftime('%H:%M')}",
             line_length=screenpatch.line_length,
-        )
-    )
-    result.append(
+        ),
         shift_center(
-            f'{custom_charecters_adresses["sun_1"]}'
-            + " "
-            + f"{sun_periods.sunrise.strftime('%H:%M')}",
+            symbols_adress_list[2]
+            + symbols_adress_list[3]
+            + f" {sun_periods.sunrise.strftime('%H:%M')}",
             line_length=screenpatch.line_length,
-        )
+        ),
     )
 
     return "\n".join(result)
