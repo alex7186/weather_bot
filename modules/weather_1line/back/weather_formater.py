@@ -1,5 +1,4 @@
 from back.cache_mananger import Weather
-from back.text_converter import shift_center
 from back.custom_charecters_manager import CustomCharacters, CHARS_SET
 
 from modules.base_screen_module import ScreenPatch
@@ -8,10 +7,19 @@ from modules.base_screen_module import ScreenPatch
 base_margin_left = 9
 
 
+def load_custom_charecters(
+    custom_charecters: CustomCharacters, CHARS_SET: dict = CHARS_SET
+) -> tuple:
+    charecters_address_list = (custom_charecters.append(CHARS_SET["degree"]),)
+    custom_charecters.load_custom_characters_data()
+
+    return charecters_address_list
+
+
 def format_weather(
     weather: Weather,
     screenpatch: ScreenPatch,
-    custom_charecters: CustomCharacters,
+    charecters_address_list: list,
 ) -> str:
     """Formats weather data in string"""
 
@@ -23,19 +31,10 @@ def format_weather(
             res = str(temperature)
         return res
 
-    degree_celsium_symbol = custom_charecters.append(CHARS_SET["degree"])
-    custom_charecters.load_custom_characters_data()
-
-    result = (
-        shift_center(
-            weather.weather_type.value
-            + " "
-            + format_temperature(weather.temperature)
-            + " C"
-            + degree_celsium_symbol,
-            line_length=screenpatch.line_length,
-            skip_left=screenpatch.columns_start - 1,
-        ),
+    temperature = (
+        format_temperature(weather.temperature) + " C" + charecters_address_list[0]
     )
 
-    return "\n".join(result)
+    result = "  {:6} ||  {}".format(weather.weather_type.value, temperature)
+
+    return result

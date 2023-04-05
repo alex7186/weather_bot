@@ -48,13 +48,10 @@ def get_weather(coordinates: Coordinates, CONFIG: dict):
         with open("misc/weather_cache.txt", "wb") as file:
             current_time = datetime.now()
             pickle.dump((current_time, data), file)
-            mprint(f"cache_manager: dumping cache with timestamp {current_time}")
 
     def read_cache():
         with open("misc/weather_cache.txt", "rb") as file:
             data = pickle.load(file)
-            current_time = datetime.now()
-            mprint(f"cache_manager: loading cache with timestamp {data[0]}")
             return data
 
     OPENWEATHER_URL = (
