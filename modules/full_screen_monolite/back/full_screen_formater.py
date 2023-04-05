@@ -40,9 +40,17 @@ def format_full_screen(weather, sun_periods, screenpatch, custom_charecters):
     def format_temperature(temperature: int) -> str:
         res = "!E"
         if temperature >= 0:
-            res = "+" + str(temperature)
+            if temperature < 10:
+                res = "+0" + str(temperature)
+            else:
+                res = "+" + str(temperature)
         else:
+            if temperature < 10:
+                res = "0" + str(temperature)
+            else:
+                res = str(temperature)
             res = str(temperature)
+
         return res
 
     cur_datetime = datetime.now()
