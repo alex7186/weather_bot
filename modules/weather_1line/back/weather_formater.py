@@ -1,4 +1,4 @@
-from back.cache_mananger import Weather
+from back.weather_cache_mananger import Weather
 from back.custom_charecters_manager import CustomCharacters, CHARS_SET
 
 from modules.base_screen_module import ScreenPatch

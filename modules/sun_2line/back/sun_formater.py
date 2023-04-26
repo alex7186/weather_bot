@@ -1,4 +1,4 @@
-from back.cache_mananger import SunPeriods
+from back.weather_cache_mananger import SunPeriods
 from back.text_converter import shift_center
 from back.custom_charecters_manager import (
     CustomCharacters,
@@ -6,7 +6,6 @@ from back.custom_charecters_manager import (
     v_invert,
     h_invert,
 )
-
 from modules.base_screen_module import ScreenPatch
 
 

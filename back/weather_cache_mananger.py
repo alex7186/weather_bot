@@ -1,10 +1,8 @@
+import pickle, json, ssl, requests
+
 from typing import NamedTuple
 from enum import Enum
-import ssl
-import requests
 from urllib.error import URLError
-import json
-import pickle
 from datetime import datetime, timedelta
 
 from back.coords_manager import Coordinates
@@ -23,12 +21,12 @@ class ApiServiceError(Exception):
 class WeatherType(Enum):
     THUNDERSTORM = "Storm"
     DRIZZLE = "Chill"
-    RAIN = "Rain"
-    SNOW = "Snow"
+    RAIN = "Rainy"
+    SNOW = "Snowy"
     CLEAR = "Clear"
-    FOG = "Fog"
+    FOG = "Foggy"
     CLOUDS = "Clouds"
-    NONE = "None"
+    NONE = "? ? ?"
 
 
 class Weather(NamedTuple):
@@ -48,51 +46,69 @@ def get_weather(coordinates: Coordinates, CONFIG: dict):
         with open("misc/weather_cache.txt", "wb") as file:
             current_time = datetime.now()
             pickle.dump((current_time, data), file)
+            mprint("weather_cache : Кеш-файл обновлен")
 
-    def read_cache():
-        with open("misc/weather_cache.txt", "rb") as file:
-            data = pickle.load(file)
-            return data
+    def get_weather_data(api_key):
+        OPENWEATHER_URL = (
+            "https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}"
+            + f"&units=metric&appid={api_key}&exclude=daily"
+        )
 
-    OPENWEATHER_URL = (
-        "https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}"
-        + f'&units=metric&appid={CONFIG["OPENWEATHER_API_KEY"]}&exclude=daily'
-    )
+        openweather_responce = _get_openweather_responce(
+            latitude=coordinates.latitude,
+            longitude=coordinates.longitude,
+            OPENWEATHER_URL=OPENWEATHER_URL,
+        )
 
-    cache = read_cache()
+        data = _parse_openweather_responce(openweather_responce)
+        result = (
+            Weather(
+                temperature=data["temperature"],
+                weather_type=data["weather_type"],
+            ),
+            SunPeriods(
+                sunset=data["sunset"],
+                sunrise=data["sunrise"],
+            ),
+        )
+        return result
+
+    def read_cache(api_key):
+        try:
+            with open("misc/weather_cache.txt", "rb") as file:
+                data = pickle.load(file)
+                return data
+        except FileNotFoundError:
+            mprint("weather_cache : Ошибка чтения кеш-файла")
+
+            return update_cache(get_weather_data(api_key))
 
     current_time = datetime.now()
-    cached_time = cache[0]
-    cached_data = cache[1]
+    try:
+        cache = read_cache(CONFIG["OPENWEATHER_API_KEY"])
+        cached_time = cache[0]
+        cached_data = cache[1]
 
-    if current_time - cached_time > timedelta(hours=3):
-        try:
-            openweather_responce = _get_openweather_responce(
-                latitude=coordinates.latitude,
-                longitude=coordinates.longitude,
-                OPENWEATHER_URL=OPENWEATHER_URL,
-            )
-            data = _parse_openweather_responce(openweather_responce)
-            result = (
-                Weather(
-                    temperature=data["temperature"],
-                    weather_type=data["weather_type"],
-                ),
-                SunPeriods(
-                    sunset=data["sunset"],
-                    sunrise=data["sunrise"],
-                ),
-            )
-            update_cache(result)
-
-            return result
-
-        except ApiServiceError:
-            mprint(f"Не удалось получить погодные данные по координатам {coordinates}")
-            return cached_data
+    except TypeError:
+        result = get_weather_data(CONFIG["OPENWEATHER_API_KEY"])
+        update_cache(result)
+        return result
 
     else:
-        return cached_data
+        if current_time - cached_time > timedelta(hours=3):
+            try:
+                result = get_weather_data(CONFIG["OPENWEATHER_API_KEY"])
+                update_cache(result)
+                return result
+
+            except ApiServiceError:
+                mprint(
+                    f"Не удалось получить погодные данные по координатам {coordinates}"
+                )
+                return cached_data
+
+        else:
+            return cached_data
 
 
 def _get_openweather_responce(
@@ -141,6 +157,7 @@ def _parse_openweather_responce(openweather_responce: str) -> dict:
 
     try:
         openweather_dict = json.loads(openweather_responce.text)
+
     except json.JSONDecodeError:
         raise ApiServiceError
 
