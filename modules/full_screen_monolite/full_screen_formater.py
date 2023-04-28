@@ -74,8 +74,8 @@ def format_full_screen(weather, sun_periods, custom_charecters):
     result.append("         ")
 
     result[0] += "  {}/{}/{}".format(*current_date)
-    result[1] += "   {}".format(weather.weather_type.value)
-    result[2] += "  {}".format(
+    result[1] += "  {}".format(weather.weather_type.value)
+    result[2] += " {}".format(
         format_temperature(weather.temperature) + " C" + custom_charecters[0]
     )
 

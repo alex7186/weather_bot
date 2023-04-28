@@ -19,14 +19,14 @@ class ApiServiceError(Exception):
 
 
 class WeatherType(Enum):
-    THUNDERSTORM = "Storm"
-    DRIZZLE = "Chill"
-    RAIN = "Rainy"
-    SNOW = "Snowy"
-    CLEAR = "Clear"
-    FOG = "Foggy"
-    CLOUDS = "Clouds"
-    NONE = "? ? ?"
+    THUNDERSTORM = "Storm "
+    DRIZZLE = "Chill "
+    RAIN = "Rain  "
+    SNOW = "Snow  "
+    CLEAR = "Clear "
+    FOG = "Fog   "
+    CLOUDS = "Cloud "
+    NONE = "? ? ? "
 
 
 class Weather(NamedTuple):
