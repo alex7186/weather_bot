@@ -30,14 +30,6 @@ _git_commit:
 	@git add .
 	-@git commit -m $(_commit_name)
 
-_stop-service:
-	-@sudo systemctl stop $(app_name)
-	@echo "\n❌  service stopped\n"
-
-_start-service:
-	@sudo systemctl restart $(app_name)
-	@echo "\n✅  service (re)started\n"
-
 _echo_done:
 	@echo "\n✅  done!\n"
 
@@ -47,15 +39,10 @@ setup:
 	@wget -qO - https://raw.githubusercontent.com/tvdsluijs/sh-python-installer/main/python.sh | sudo bash -s 3.10.0
 
 	@pip3.10 install -r ./misc/requirements.txt
-	@sudo apt-get install python3-systemd
-	@sudo apt-get install python3-dev python3-rpi.gpio
-	@sudo apt-get install i2c-tools
-	@sudo apt-get install git
+	@sudo apt-get install python3-systemd python3-dev python3-rpi.gpio i2c-tools git
 
 	@$(MAKE) --no-print-directory copy-service
-
 	@echo "\n✅ setup complete!\n"
-
 	@$(MAKE) --no-print-directory start
 
 start-python:
@@ -65,11 +52,12 @@ status:
 	-@sudo systemctl status $(app_name) | cat
 
 stop:
-	@$(MAKE) --no-print-directory _stop-service
+	-@sudo systemctl stop $(app_name)
+	@echo "\n❌  service stopped\n"
 
 start:
-	@$(MAKE) --no-print-directory _start-service
-
+	@sudo systemctl restart $(app_name)
+	@echo "\n✅  service (re)started\n"
 
 copy-service:
 	@echo "\n⚙️  moving service to $(_common-service-path)\n"
@@ -80,9 +68,5 @@ copy-service:
 	-@sudo systemctl enable $(app_name)
 	@$(MAKE) --no-print-directory _echo_done
 
-
-cat-service:
-	@systemctl --user cat $(app_name)
-
 cat-log:
-	@journalctl --user --unit=$(app_name)
+	@journalctl --unit=$(app_name)

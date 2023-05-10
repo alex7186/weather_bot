@@ -25,20 +25,12 @@ def load_custom_charecters(
 
 def format_full_screen(weather, sun_periods, custom_charecters):
     def format_temperature(temperature: int) -> str:
-        res = "!E"
-        if temperature >= 0:
-            if temperature < 10:
-                res = "+0" + str(temperature)
-            else:
-                res = "+" + str(temperature)
-        else:
-            if temperature < 10:
-                res = "0" + str(temperature)
-            else:
-                res = str(temperature)
-            res = str(temperature)
 
-        return res
+        return (
+            "" + "-"
+            if temperature < 0
+            else "+" + ("0" if abs(temperature) < 10 else "") + str(temperature)
+        )
 
     cur_datetime = datetime.now()
 
@@ -71,11 +63,9 @@ def format_full_screen(weather, sun_periods, custom_charecters):
     if sun_periods.sunset < cur_datetime:
         result.append("{}{}:{}:{}".format(custom_charecters[1], *current_time))
 
-    result.append("         ")
-
     result[0] += "  {}/{}/{}".format(*current_date)
     result[1] += "  {}".format(weather.weather_type.value)
-    result[2] += " {}".format(
+    result[2] += "  {}".format(
         format_temperature(weather.temperature) + " C" + custom_charecters[0]
     )
 

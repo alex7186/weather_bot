@@ -49,6 +49,18 @@ def get_weather(coordinates: Coordinates, CONFIG: dict):
             mprint("weather_cache : Кеш-файл обновлен")
 
     def get_weather_data(api_key):
+        def _get_openweather_responce(
+            latitude: float, longitude: float, OPENWEATHER_URL: str
+        ) -> str:
+            ssl.create_default_context = ssl._create_unverified_context
+            url = OPENWEATHER_URL.format(latitude=latitude, longitude=longitude)
+
+            try:
+                return requests.get(url, timeout=4)
+
+            except (URLError, requests.exceptions.ConnectTimeout):
+                raise ApiServiceError
+
         OPENWEATHER_URL = (
             "https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}"
             + f"&units=metric&appid={api_key}&exclude=daily"
@@ -103,25 +115,12 @@ def get_weather(coordinates: Coordinates, CONFIG: dict):
 
             except ApiServiceError:
                 mprint(
-                    f"Не удалось получить погодные данные по координатам {coordinates}"
+                    f"weather_cache : Не удалось получить погодные данные по координатам {coordinates}"
                 )
                 return cached_data
 
         else:
             return cached_data
-
-
-def _get_openweather_responce(
-    latitude: float, longitude: float, OPENWEATHER_URL: str
-) -> str:
-    ssl.create_default_context = ssl._create_unverified_context
-    url = OPENWEATHER_URL.format(latitude=latitude, longitude=longitude)
-
-    try:
-        return requests.get(url, timeout=4)
-
-    except URLError:
-        raise ApiServiceError
 
 
 def _parse_openweather_responce(openweather_responce: str) -> dict:
