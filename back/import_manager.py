@@ -3,11 +3,15 @@ from datetime import datetime
 from importlib import import_module
 from typing import Any
 
+from back.custom_charecters_manager import CustomCharacters
 from back.print_manager import mprint
 
 
 def import_modules(
-    modules_list: list, CONFIG: dict, screenpatch_collection: list, custom_charecters
+    modules_list: list, 
+    CONFIG: dict, 
+    screenpatch_collection: list, 
+    custom_charecters: CustomCharacters,
 ) -> list[Any]:
     """
     import all "main.py" files
@@ -57,7 +61,7 @@ def custom_exception_handler(loop, context):
         # loop.close()
 
 
-def execute_modules(modules_objects: list[Any]) -> list[asyncio.Task]:
+def execute_modules(modules_objects: list[Any]) -> tuple[set[asyncio.Task[Any]], set[asyncio.Task[Any]]]:
     modules_execute_event_loop = asyncio.new_event_loop()
     modules_execute_event_loop.set_exception_handler(custom_exception_handler)
 

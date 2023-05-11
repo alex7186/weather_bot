@@ -64,9 +64,7 @@ Rs = 0b00000001  # Register select bit
 class I2CDevice:
     SLEEP_SHORT = 0.0001
 
-    def __init__(
-        self, addr: int = None, addr_default: int = None, bus: int = BUS_NUMBER
-    ) -> None:
+    def __init__(self, addr=None, addr_default=None, bus=BUS_NUMBER):
 
         if addr:
             self.addr = addr
@@ -95,7 +93,7 @@ class I2CDevice:
 
         self.bus = SMBus(bus)
 
-    def write_cmd(self, cmd: int) -> None:
+    def write_cmd(self, cmd):
         """write a single command"""
         try:
             self.bus.write_byte(self.addr, cmd)
@@ -103,7 +101,7 @@ class I2CDevice:
         except Exception:
             raise I2CDeviceError
 
-    def write_cmd_arg(self, cmd: int, data) -> None:
+    def write_cmd_arg(self, cmd, data):
         """write a command and argument"""
         try:
             self.bus.write_byte_data(self.addr, cmd, data)
@@ -111,7 +109,7 @@ class I2CDevice:
         except Exception:
             raise I2CDeviceError
 
-    def write_block_data(self, cmd: int, data):
+    def write_block_data(self, cmd, data):
         """write a block of data"""
         try:
             self.bus.write_block_data(self.addr, cmd, data)
@@ -119,14 +117,14 @@ class I2CDevice:
         except Exception:
             raise I2CDeviceError
 
-    def read(self) -> int:
+    def read(self):
         """read a single byte"""
         try:
             return self.bus.read_byte(self.addr)
         except Exception:
             raise I2CDeviceError
 
-    def read_data(self, cmd: int):
+    def read_data(self, cmd):
         """read"""
         try:
             return self.bus.read_byte_data(self.addr, cmd)

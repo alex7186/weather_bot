@@ -3,11 +3,11 @@ import json
 from back.i2c_manager import Rs
 
 
-def v_invert(custom_charecter: dict[str]):
+def v_invert(custom_charecter: list[list[str]]) -> list[list[str]]:
     return custom_charecter[::-1]
 
 
-def h_invert(custom_charecter: dict[str]):
+def h_invert(custom_charecter: list[list[str]]) -> list[list[str]]:
     return list(map(lambda x: x[::-1], custom_charecter))
 
 

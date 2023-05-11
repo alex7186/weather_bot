@@ -50,7 +50,8 @@ def shift_center(
 
 def make_text_from_screenpatch_collection(
     screen: LCDScreen, screenpatch_collection: list, modules_objects
-) -> str:
+) -> list[str]:
+    
     unformated_text = [""] * screen.lines_count
 
     for i_screenpatch, screenpatch in enumerate(screenpatch_collection):
