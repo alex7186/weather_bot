@@ -4,10 +4,10 @@ from typing import NamedTuple
 from enum import Enum
 from urllib.error import URLError
 from datetime import datetime, timedelta
+from typing import Any
 
 from back.coords_manager import Coordinates
 from back.print_manager import mprint
-
 
 Celsius = int
 
@@ -39,16 +39,26 @@ class SunPeriods(NamedTuple):
     sunset: datetime = datetime(year=1970, month=1, day=1, hour=0, minute=0)
 
 
-def get_weather(coordinates: Coordinates, CONFIG: dict):
+def get_weather(coordinates: Coordinates, CONFIG: dict) -> tuple[Weather, SunPeriods]:
     """Requests weather in OpenWeather Api and returns it"""
 
-    def update_cache(data):
+    def update_cache(data: tuple[datetime, tuple[Weather, SunPeriods]]) -> None:
         with open("misc/weather_cache.txt", "wb") as file:
             current_time = datetime.now()
             pickle.dump((current_time, data), file)
             mprint("weather_cache : Кеш-файл обновлен")
 
-    def get_weather_data(api_key):
+    def read_cache(api_key: str) -> tuple[datetime, tuple[Weather, SunPeriods]]:
+        try:
+            with open("misc/weather_cache.txt", "rb") as file:
+                data = pickle.load(file)
+                return data
+        except FileNotFoundError:
+            mprint("weather_cache : Ошибка чтения кеш-файла")
+
+            return update_cache(get_weather_data(api_key))
+
+    def get_weather_data(api_key: str) -> tuple[Weather, SunPeriods]:
         def _get_openweather_responce(
             latitude: float, longitude: float, OPENWEATHER_URL: str
         ) -> str:
@@ -73,7 +83,8 @@ def get_weather(coordinates: Coordinates, CONFIG: dict):
         )
 
         data = _parse_openweather_responce(openweather_responce)
-        result = (
+
+        return (
             Weather(
                 temperature=data["temperature"],
                 weather_type=data["weather_type"],
@@ -83,19 +94,9 @@ def get_weather(coordinates: Coordinates, CONFIG: dict):
                 sunrise=data["sunrise"],
             ),
         )
-        return result
-
-    def read_cache(api_key):
-        try:
-            with open("misc/weather_cache.txt", "rb") as file:
-                data = pickle.load(file)
-                return data
-        except FileNotFoundError:
-            mprint("weather_cache : Ошибка чтения кеш-файла")
-
-            return update_cache(get_weather_data(api_key))
 
     current_time = datetime.now()
+
     try:
         cache = read_cache(CONFIG["OPENWEATHER_API_KEY"])
         cached_time = cache[0]
@@ -123,7 +124,7 @@ def get_weather(coordinates: Coordinates, CONFIG: dict):
             return cached_data
 
 
-def _parse_openweather_responce(openweather_responce: str) -> dict:
+def _parse_openweather_responce(openweather_responce: str) -> dict[str, Any]:
     def _parse_suntime(openweather_dict: dict, time) -> datetime:
         return datetime.fromtimestamp(openweather_dict["sys"][time])
 

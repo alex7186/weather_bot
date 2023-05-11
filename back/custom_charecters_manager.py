@@ -25,7 +25,7 @@ class CustomCharacters:
         self.chars = dict(zip([el for el in range(8)], [["1" * 5] * 8] * 8))
         self.current_index = 0
 
-    def append(self, data):
+    def append(self, data: list) -> str:
         if self.current_index < 7:
 
             self.chars[self.current_index] = data

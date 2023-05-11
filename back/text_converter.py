@@ -69,7 +69,7 @@ def make_text_from_screenpatch_collection(
 
 def make_screenpatch_view(
     screen: LCDScreen, screenpatch_collection: list, modules_objects
-):
+) -> None:
 
     unformated_text = make_text_from_screenpatch_collection(
         screen=screen,

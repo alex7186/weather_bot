@@ -10,7 +10,8 @@ logging.basicConfig(
 )
 
 
-def mprint(message):
+def mprint(message: str) -> None:
+    """it's like usual 'print' but with logging"""
     try:
         print(message)
         logging.info(message)

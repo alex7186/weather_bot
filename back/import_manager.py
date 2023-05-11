@@ -1,13 +1,14 @@
 import asyncio
 from datetime import datetime
 from importlib import import_module
+from typing import Any
 
 from back.print_manager import mprint
 
 
 def import_modules(
     modules_list: list, CONFIG: dict, screenpatch_collection: list, custom_charecters
-) -> list:
+) -> list[Any]:
     """
     import all "main.py" files
     by template <SCRIPT_PATH>/modules/module_1/main.py
@@ -56,7 +57,7 @@ def custom_exception_handler(loop, context):
         # loop.close()
 
 
-def execute_modules(modules_objects: list) -> list:
+def execute_modules(modules_objects: list[Any]) -> list[asyncio.Task]:
     modules_execute_event_loop = asyncio.new_event_loop()
     modules_execute_event_loop.set_exception_handler(custom_exception_handler)
 

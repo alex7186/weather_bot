@@ -1,4 +1,5 @@
 from datetime import datetime
+from back.weather_cache_mananger import Weather, SunPeriods, Celsius
 from back.custom_charecters_manager import (
     CustomCharacters,
     CHARS_SET,
@@ -12,7 +13,7 @@ base_margin_left = 9
 
 def load_custom_charecters(
     custom_charecters: CustomCharacters, CHARS_SET: dict = CHARS_SET
-) -> tuple:
+) -> tuple[str]:
     charecters_address_list = (
         custom_charecters.append(CHARS_SET["degree"]),
         custom_charecters.append(CHARS_SET["arrow_right"]),
@@ -23,8 +24,10 @@ def load_custom_charecters(
     return charecters_address_list
 
 
-def format_full_screen(weather, sun_periods, custom_charecters):
-    def format_temperature(temperature: int) -> str:
+def format_full_screen(
+    weather: Weather, sun_periods: SunPeriods, custom_charecters: CustomCharacters
+) -> list[str]:
+    def format_temperature(temperature: Celsius) -> str:
 
         return (
             "" + "-"
