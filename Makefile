@@ -38,8 +38,8 @@ setup:
 	@echo "\n📝  installing dependencies...\n"
 	@wget -qO - https://raw.githubusercontent.com/tvdsluijs/sh-python-installer/main/python.sh | sudo bash -s 3.10.0
 
-	@pip3.10 install -r ./misc/requirements.txt
-	@sudo apt-get install python3-systemd python3-dev python3-rpi.gpio i2c-tools git
+	@pip3.10 install -r ./misc/python_requirements.txt
+	@sudo apt-get install $(cat ./misc/packages_requirements.txt)
 
 	@$(MAKE) --no-print-directory copy-service
 	@echo "\n✅ setup complete!\n"
