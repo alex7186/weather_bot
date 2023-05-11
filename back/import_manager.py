@@ -8,9 +8,9 @@ from back.print_manager import mprint
 
 
 def import_modules(
-    modules_list: list, 
-    CONFIG: dict, 
-    screenpatch_collection: list, 
+    modules_list: list,
+    CONFIG: dict,
+    screenpatch_collection: list,
     custom_charecters: CustomCharacters,
 ) -> list[Any]:
     """
@@ -61,7 +61,9 @@ def custom_exception_handler(loop, context):
         # loop.close()
 
 
-def execute_modules(modules_objects: list[Any]) -> tuple[set[asyncio.Task[Any]], set[asyncio.Task[Any]]]:
+def execute_modules(
+    modules_objects: list[Any],
+) -> tuple[set[asyncio.Task[Any]], set[asyncio.Task[Any]]]:
     modules_execute_event_loop = asyncio.new_event_loop()
     modules_execute_event_loop.set_exception_handler(custom_exception_handler)
 
