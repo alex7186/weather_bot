@@ -11,7 +11,7 @@
         {
             "name" : "full_screen_monolite",
             "refrash_skip_rate" : 1,
-            "rows" : [0, 1, 2],
+            "rows" : [0, 1, 2, 3],
             "columns_start" : 0,
             "columns_stop" : 19
         }

@@ -1,4 +1,6 @@
 from datetime import datetime
+import calendar
+
 from back.weather_cache_mananger import Weather, SunPeriods, Celsius
 from back.custom_charecters_manager import (
     CustomCharacters,
@@ -17,6 +19,7 @@ def load_custom_charecters(
     charecters_address_list = (
         custom_charecters.append(CHARS_SET["degree"]),
         custom_charecters.append(CHARS_SET["arrow_right"]),
+        custom_charecters.append(CHARS_SET["arrow_simple_right"]),
     )
 
     custom_charecters.load_custom_characters_data()
@@ -55,6 +58,7 @@ def format_full_screen(
 
     result = []
 
+    # printing left part of the screen
     if cur_datetime < sun_periods.sunrise:
         result.append("{}{}:{}:{}".format(custom_charecters[1], *current_time))
     result.append(" {}".format(sun_periods.sunrise.strftime("%H:%M:%S")))
@@ -66,10 +70,14 @@ def format_full_screen(
     if sun_periods.sunset < cur_datetime:
         result.append("{}{}:{}:{}".format(custom_charecters[1], *current_time))
 
+    result.append(" " * 9)
+
+    # printing right part of the screen
     result[0] += "  {}/{}/{}".format(*current_date)
-    result[1] += "  {}".format(weather.weather_type.value)
-    result[2] += "  {}".format(
+    result[1] += "  {}".format(
         format_temperature(weather.temperature) + " C" + custom_charecters[0]
     )
+    result[2] += "  {}".format(weather.weather_type.value)
+    result[3] += "  {}".format(calendar.day_name[cur_datetime.weekday()][:3])
 
     return "\n".join(result)
