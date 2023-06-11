@@ -1,5 +1,3 @@
-from back.coords_manager import get_coords
-from back.weather_cache_mananger import get_weather
 from back.custom_charecters_manager import CustomCharacters, CHARS_SET
 
 from modules.base_screen_module import ScreenPatch

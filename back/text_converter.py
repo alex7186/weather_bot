@@ -1,5 +1,4 @@
 from typing import NamedTuple
-import re
 
 from back.print_manager import mprint
 from modules.base_screen_module import ScreenPatch
