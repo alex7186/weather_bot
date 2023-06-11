@@ -22,7 +22,7 @@ def import_modules(
     modules_path_list = [f"modules.{module_name}.main" for module_name in modules_list]
     APP_NAME = "import_manager"
 
-    imported_modules = []
+    imported_modules: list[Any] = []
     for i, module_instance in enumerate(modules_path_list):
         imported_modules.append(importlib_import_module(module_instance))
         mprint(APP_NAME + " " + f": Imported {modules_list[i]}")
