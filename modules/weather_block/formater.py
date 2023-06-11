@@ -15,8 +15,8 @@ def load_custom_charecters(
     custom_charecters: CustomCharacters, CHARS_SET: dict = CHARS_SET
 ) -> tuple[str]:
     charecters_address_list = (
-        custom_charecters.append(CHARS_SET["degree"]),
-        custom_charecters.append(CHARS_SET["arrow_right"]),
+        # custom_charecters.append(CHARS_SET["degree"]),
+        # custom_charecters.append(CHARS_SET["arrow_right"]),
     )
 
     custom_charecters.load_custom_characters_data()
@@ -48,7 +48,8 @@ def format_full_screen(
     result.append(" {}/{}/{}".format(*current_date))
     result.append(
         " {:<8}".format(
-            format_temperature(weather.temperature) + " C" + custom_charecters[0]
+            "{:<3}".format(format_temperature(weather.temperature))
+            + " C"  # + custom_charecters[0]
         )
     )
     result.append(" {:<8}".format(weather.weather_type.value))

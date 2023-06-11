@@ -66,7 +66,7 @@ def make_text_from_screenpatch_collection(
 
             unformated_text[row_screenpatch] = (
                 unformated_text[row_screenpatch][: -(screenpatch.columns_start)]
-                + screenpatch_text_split[row_screenpatch]
+                + screenpatch_text_split[screenpatch.rows.index(row_screenpatch)]
                 + unformated_text[row_screenpatch][screenpatch.columns_stop :]
             )
 

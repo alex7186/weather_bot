@@ -101,7 +101,7 @@ def update_screen(display: Lcd, unformated_text: str) -> None:
                 i_row,
             )
     except I2CDeviceError:
-        mprint(CONFIG["APP_NAME"] + " " + "get I2CDeviceError")
+        mprint(CONFIG["APP_NAME"] + " : " + "get I2CDeviceError")
         time.sleep(5)
 
 

@@ -53,7 +53,7 @@ def get_weather(coordinates: Coordinates, CONFIG: dict) -> tuple[Weather, SunPer
             with open("misc/weather_cache.txt", "rb") as file:
                 data = pickle.load(file)
                 return data
-        except FileNotFoundError:
+        except (FileNotFoundError, PermissionError):
             mprint("weather_cache : Ошибка чтения кеш-файла")
 
             return update_cache(get_weather_data(api_key))

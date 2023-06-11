@@ -13,10 +13,7 @@ base_margin_left = 9
 def load_custom_charecters(
     custom_charecters: CustomCharacters, CHARS_SET: dict = CHARS_SET
 ) -> tuple[str]:
-    charecters_address_list = (
-        custom_charecters.append(CHARS_SET["degree"]),
-        custom_charecters.append(CHARS_SET["arrow_right"]),
-    )
+    charecters_address_list = (custom_charecters.append(CHARS_SET["arrow_right"]),)
 
     custom_charecters.load_custom_characters_data()
 
@@ -41,15 +38,17 @@ def format_full_screen(
 
     result = []
 
-    if cur_datetime < sun_periods.sunrise:
-        result.append("{}{}:{}:{}".format(custom_charecters[1], *current_time))
+    # if cur_datetime < sun_periods.sunrise:
+    # result.append("{}{}:{}:{}".format(custom_charecters[0], *current_time))
+
     result.append(" {}".format(sun_periods.sunrise.strftime("%H:%M:%S")))
 
-    if sun_periods.sunrise < cur_datetime < sun_periods.sunset:
-        result.append("{}{}:{}:{}".format(custom_charecters[1], *current_time))
+    # if sun_periods.sunrise < cur_datetime < sun_periods.sunset:
+    result.append("{}{}:{}:{}".format(custom_charecters[0], *current_time))
+
     result.append(" {}".format(sun_periods.sunset.strftime("%H:%M:%S")))
 
-    if sun_periods.sunset < cur_datetime:
-        result.append("{}{}:{}:{}".format(custom_charecters[1], *current_time))
+    # if sun_periods.sunset < cur_datetime:
+    # result.append("{}{}:{}:{}".format(custom_charecters[0], *current_time))
 
     return "\n".join(result)
