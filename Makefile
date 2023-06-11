@@ -53,11 +53,11 @@ status:
 
 stop:
 	-@sudo systemctl stop $(app_name)
-	@echo "\n❌  service stopped\n"
+	@echo "\n❌  service stopped"
 
 start:
 	@sudo systemctl restart $(app_name)
-	@echo "\n✅  service (re)started\n"
+	@echo "\n✅  service (re)started"
 
 copy-service:
 	@echo "\n⚙️  moving service to $(_common-service-path)\n"

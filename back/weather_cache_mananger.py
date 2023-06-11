@@ -58,25 +58,26 @@ def get_weather(coordinates: Coordinates, CONFIG: dict) -> tuple[Weather, SunPer
 
             return update_cache(get_weather_data(api_key))
 
+    def get_openweather_responce(
+        latitude: float, longitude: float, OPENWEATHER_URL: str
+    ) -> str:
+        ssl.create_default_context = ssl._create_unverified_context
+        url = OPENWEATHER_URL.format(latitude=latitude, longitude=longitude)
+
+        try:
+            return requests.get(url, timeout=4)
+
+        except (URLError, requests.exceptions.ConnectTimeout):
+            raise ApiServiceError
+
     def get_weather_data(api_key: str) -> tuple[Weather, SunPeriods]:
-        def _get_openweather_responce(
-            latitude: float, longitude: float, OPENWEATHER_URL: str
-        ) -> str:
-            ssl.create_default_context = ssl._create_unverified_context
-            url = OPENWEATHER_URL.format(latitude=latitude, longitude=longitude)
-
-            try:
-                return requests.get(url, timeout=4)
-
-            except (URLError, requests.exceptions.ConnectTimeout):
-                raise ApiServiceError
 
         OPENWEATHER_URL = (
             "https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}"
             + f"&units=metric&appid={api_key}&exclude=daily"
         )
 
-        openweather_responce = _get_openweather_responce(
+        openweather_responce = get_openweather_responce(
             latitude=coordinates.latitude,
             longitude=coordinates.longitude,
             OPENWEATHER_URL=OPENWEATHER_URL,

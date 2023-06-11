@@ -12,15 +12,20 @@ from modules.dawn_time_dusk.formater import (
 class MainModule(ScreenPatch):
     def __init__(
         self,
-        screenpatch: ScreenPatch,
+        rows: int,
+        columns_start: int,
+        columns_stop: int,
         refrash_skip_rate: int,
         CONFIG: dict,
         custom_charecters: CustomCharacters,
     ) -> None:
 
         super().__init__(
-            screenpatch,
+            rows=rows,
+            columns_start=columns_start,
+            columns_stop=columns_stop,
         )
+
         self.refrash_skip_rate = refrash_skip_rate
         self.execution_count = 0
         self.custom_charecters = load_custom_charecters(

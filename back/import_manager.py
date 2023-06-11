@@ -1,16 +1,18 @@
 import asyncio
 from datetime import datetime
-from importlib import import_module
+from importlib import import_module as importlib_import_module
 from typing import Any
 
 from back.custom_charecters_manager import CustomCharacters
 from back.print_manager import mprint
 
+from modules.base_screen_module import ScreenPatch
+
 
 def import_modules(
     modules_list: list,
     CONFIG: dict,
-    screenpatch_collection: list,
+    screenpatch_collection: list[ScreenPatch],
     custom_charecters: CustomCharacters,
 ) -> list[Any]:
     """
@@ -22,8 +24,8 @@ def import_modules(
     APP_NAME = "import_manager"
 
     imported_modules = []
-    for i, module in enumerate(modules_path_list):
-        imported_modules.append(import_module(module))
+    for i, module_instance in enumerate(modules_path_list):
+        imported_modules.append(importlib_import_module(module_instance))
         mprint(APP_NAME + " " + f": Imported {modules_list[i]}")
 
     modules_objects = []
@@ -31,21 +33,17 @@ def import_modules(
         map(lambda x: x["refrash_skip_rate"], CONFIG["modules_data"])
     )
 
-    for i, module in enumerate(imported_modules):
+    for i, module_instance in enumerate(imported_modules):
         modules_objects.append(
-            module.MainModule(
-                screenpatch=screenpatch_collection[i],
+            module_instance.MainModule(
+                rows=screenpatch_collection[i].rows,
+                columns_start=screenpatch_collection[i].columns_start,
+                columns_stop=screenpatch_collection[i].columns_stop,
                 refrash_skip_rate=refrash_skip_rates[i],
                 CONFIG=CONFIG,
                 custom_charecters=custom_charecters,
             )
         )
-
-        date = ".".join(
-            str(el) for el in list(datetime.now().date().timetuple())[:3][::-1]
-        )
-        time = str(datetime.now().time()).split(".")[0]
-        date = time + " " + date
 
     return modules_objects
 
@@ -64,6 +62,7 @@ def custom_exception_handler(loop, context):
 def execute_modules(
     modules_objects: list[Any],
 ) -> tuple[set[asyncio.Task[Any]], set[asyncio.Task[Any]]]:
+
     modules_execute_event_loop = asyncio.new_event_loop()
     modules_execute_event_loop.set_exception_handler(custom_exception_handler)
 
@@ -77,9 +76,4 @@ def execute_modules(
 
     wait_tasks = asyncio.wait(tasks)
 
-    modules_res = modules_execute_event_loop.run_until_complete(wait_tasks)
-
-    # modules_execute_event_loop.stop()
-    # modules_execute_event_loop.close()
-
-    return modules_res
+    return modules_execute_event_loop.run_until_complete(wait_tasks)
