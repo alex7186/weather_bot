@@ -2,14 +2,14 @@ from back.coords_manager import get_coords
 from back.weather_cache_mananger import get_weather
 from back.custom_charecters_manager import CustomCharacters, CHARS_SET
 
-from modules.base_screen_module import ScreenPatch, ScreenPatchModule
-from modules.full_screen_monolite.back.full_screen_formater import (
+from modules.base_screen_module import ScreenPatch
+from modules.weather_block.formater import (
     format_full_screen,
     load_custom_charecters,
 )
 
 
-class MainModule(ScreenPatchModule):
+class MainModule(ScreenPatch):
     def __init__(
         self,
         screenpatch: ScreenPatch,

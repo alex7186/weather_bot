@@ -64,8 +64,30 @@ each module is entered into a 'config.json' file in the 'modules_data' section a
 * `refrash_skip_rate` - a number indicating how many screen refresh units (by default "GLOBAL_REFRASH_RATE" : 1) the module method `generate_screen_text` will be executed
 * `rows`, `columns_start`, `columns_stop` - locates the module screen area (ScreenPatch)
 
+# Screen modules example
+## `dawn_time_dusk` module
+this module is three lines by 9 characters. displays sunrise, sunset and current time data
+```
+╭――――――――――――――――――――╮
+| 03:49:58           |
+|➡️16:47:49           |
+| 21:11:03           |
+|                    |
+╰――――――――――――――――――――╯
+```
 
+## `weather_block` module
+this module is three lines by 9 characters. data of the current date, temperature, type of weather, day of the week are displayed
+```
+╭――――――――――――――――――――╮
+|           11/06/23 |
+|           +16 C°   |
+|           Clear    |
+|           Sun      |
+╰――――――――――――――――――――╯
+```
 
+* Emoji characters from the screen test cases are displayed as `CustomCharacters` (5x8 pixels)
 
 # Thanks to / Credits
 

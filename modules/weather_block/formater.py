@@ -40,16 +40,6 @@ def format_full_screen(
 
     cur_datetime = datetime.now()
 
-    current_time = (
-        cur_datetime.hour if cur_datetime.hour > 9 else "0" + str(cur_datetime.hour),
-        cur_datetime.minute
-        if cur_datetime.minute > 9
-        else "0" + str(cur_datetime.minute),
-        cur_datetime.second
-        if cur_datetime.second > 9
-        else "0" + str(cur_datetime.second),
-    )
-
     current_date = (
         cur_datetime.day if cur_datetime.day > 9 else "0" + str(cur_datetime.day),
         cur_datetime.month if cur_datetime.month > 9 else "0" + str(cur_datetime.month),
@@ -58,26 +48,13 @@ def format_full_screen(
 
     result = []
 
-    # printing left part of the screen
-    if cur_datetime < sun_periods.sunrise:
-        result.append("{}{}:{}:{}".format(custom_charecters[1], *current_time))
-    result.append(" {}".format(sun_periods.sunrise.strftime("%H:%M:%S")))
-
-    if sun_periods.sunrise < cur_datetime < sun_periods.sunset:
-        result.append("{}{}:{}:{}".format(custom_charecters[1], *current_time))
-    result.append(" {}".format(sun_periods.sunset.strftime("%H:%M:%S")))
-
-    if sun_periods.sunset < cur_datetime:
-        result.append("{}{}:{}:{}".format(custom_charecters[1], *current_time))
-
-    result.append(" " * 9)
-
-    # printing right part of the screen
-    result[0] += "  {}/{}/{}".format(*current_date)
-    result[1] += "  {}".format(
-        format_temperature(weather.temperature) + " C" + custom_charecters[0]
+    result.append(" {}/{}/{}".format(*current_date))
+    result.append(
+        " {:<8}".format(
+            format_temperature(weather.temperature) + " C" + custom_charecters[0]
+        )
     )
-    result[2] += "  {}".format(weather.weather_type.value)
-    result[3] += "  {}".format(calendar.day_name[cur_datetime.weekday()][:3])
+    result.append(" {:<8}".format(weather.weather_type.value))
+    result.append(" {:<8}".format(calendar.day_name[cur_datetime.weekday()][:3]))
 
     return "\n".join(result)

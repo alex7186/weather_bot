@@ -9,10 +9,17 @@
 
     "modules_data": [
         {
-            "name" : "full_screen_monolite",
+            "name" : "dawn_time_dusk",
+            "refrash_skip_rate" : 1,
+            "rows" : [0, 1, 2],
+            "columns_start" : 0,
+            "columns_stop" : 9
+        },
+        {
+            "name" : "weather_block",
             "refrash_skip_rate" : 1,
             "rows" : [0, 1, 2, 3],
-            "columns_start" : 0,
+            "columns_start" : 9,
             "columns_stop" : 19
         }
     ]

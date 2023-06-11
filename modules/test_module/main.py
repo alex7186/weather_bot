@@ -2,14 +2,14 @@ from back.coords_manager import get_coords
 from back.weather_cache_mananger import get_weather
 from back.custom_charecters_manager import CustomCharacters, CHARS_SET
 
-from modules.base_screen_module import ScreenPatch, ScreenPatchModule
-from modules.weather_1line.back.weather_formater import (
-    format_weather,
+from modules.base_screen_module import ScreenPatch, ScreenPatch
+from modules.test_module.formater import (
+    format_full_screen,
     load_custom_charecters,
 )
 
 
-class MainModule(ScreenPatchModule):
+class MainModule(ScreenPatch):
     def __init__(
         self,
         screenpatch: ScreenPatch,
@@ -30,10 +30,16 @@ class MainModule(ScreenPatchModule):
         self.CONFIG = CONFIG
 
     async def generate_screen_text(self) -> str:
-        coordinates = get_coords()
+        # coordinates = get_coords()
 
-        weather, _ = get_weather(coordinates, self.CONFIG)
+        # weather, sun_periods = get_weather(coordinates, self.CONFIG)
 
-        res_text = format_weather(weather, self.screenpatch, self.custom_charecters)
+        # res_text = format_full_screen(
+        #     weather=weather,
+        #     sun_periods=sun_periods,
+        #     custom_charecters=self.custom_charecters,
+        # )
 
-        return res_text
+        res_text = ["t" * self.screenpatch.line_length] * len(self.screenpatch.rows)
+
+        return "\n".join(res_text)

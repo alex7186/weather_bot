@@ -1,5 +1,8 @@
 from typing import NamedTuple
+import re
+
 from back.print_manager import mprint
+from modules.base_screen_module import ScreenPatch
 
 
 class LCDScreen(NamedTuple):
@@ -49,27 +52,30 @@ def shift_center(
 
 
 def make_text_from_screenpatch_collection(
-    screen: LCDScreen, screenpatch_collection: list, modules_objects
+    screen: LCDScreen, screenpatch_collection: list[ScreenPatch], modules_objects
 ) -> list[str]:
 
-    unformated_text = [""] * screen.lines_count
+    unformated_text = [" " * screen.line_length] * screen.lines_count
 
     for i_screenpatch, screenpatch in enumerate(screenpatch_collection):
+
         screenpatch_text_split = (
             modules_objects[i_screenpatch].get_screenpatch_text().split("\n")
         )
 
-        for i_row, row_screenpatch in enumerate(screenpatch.rows):
-            try:
-                unformated_text[row_screenpatch] = screenpatch_text_split[i_row]
-            except IndexError:
-                unformated_text[row_screenpatch] = "IndexError"
+        for row_screenpatch in screenpatch.rows:
+
+            unformated_text[row_screenpatch] = (
+                unformated_text[row_screenpatch][: -(screenpatch.columns_start)]
+                + screenpatch_text_split[row_screenpatch]
+                + unformated_text[row_screenpatch][screenpatch.columns_stop :]
+            )
 
     return unformated_text
 
 
 def make_screenpatch_view(
-    screen: LCDScreen, screenpatch_collection: list, modules_objects
+    screen: LCDScreen, screenpatch_collection: list[ScreenPatch], modules_objects
 ) -> None:
 
     unformated_text = make_text_from_screenpatch_collection(

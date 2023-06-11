@@ -1,20 +1,14 @@
 class ScreenPatch:
     """Square space on the screen"""
 
-    def __init__(self, rows: list = [], columns_start: int = 0, columns_stop: int = -1):
+    def __init__(
+        self, rows: list = [], columns_start: int = 0, columns_stop: int = -1
+    ) -> None:
+
         self.rows = rows
         self.columns_start = columns_start
         self.columns_stop = columns_stop
 
-        self.columns = (columns_start, columns_stop)
-        self.line_length = columns_stop - columns_start
-
-
-class ScreenPatchModule:
-    """Patch screen manager module"""
-
-    def __init__(self, screenpatch: ScreenPatch) -> None:
-        self.screenpatch = screenpatch
         self.current_text: str = ""
 
     def set_screenpatch_text(self, new_text):
@@ -34,6 +28,5 @@ class ScreenPatchModule:
 
         self.execution_count += 1
         return {
-            "screenpatch": self.screenpatch,
             "new_text": self.get_screenpatch_text(),
         }
