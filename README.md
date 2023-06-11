@@ -61,7 +61,7 @@ This method generates text for its screen area area defined in the settings file
 
 each module is entered into a 'config.json' file in the 'modules_data' section and has the following fields:
 * `name` - module name for searching in `<PATH_TO_PROJECT_DIR>/modules/<name>`
-* `refrash_skip_rate` - a number indicating how many screen refresh units (by default "GLOBAL_REFRASH_RATE" : 1) the module method `generate_screen_text` will be executed
+* `refrash_skip_rate` - a number indicating how many screen refresh units (by default "GLOBAL_REFRESH_RATE" : 1) the module method `generate_screen_text` will be executed
 * `rows`, `columns_start`, `columns_stop` - locates the module screen area (ScreenPatch)
 
 # Screen modules example

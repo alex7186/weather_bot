@@ -19,7 +19,6 @@ def load_custom_charecters(
     charecters_address_list = (
         custom_charecters.append(CHARS_SET["degree"]),
         custom_charecters.append(CHARS_SET["arrow_right"]),
-        custom_charecters.append(CHARS_SET["arrow_simple_right"]),
     )
 
     custom_charecters.load_custom_characters_data()

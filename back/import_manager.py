@@ -52,11 +52,12 @@ def custom_exception_handler(loop, context):
     # first, handle with default handler
     loop.default_exception_handler(context)
 
-    exception = context.get("exception")
-    if isinstance(exception, ZeroDivisionError):
-        mprint(context)
-        loop.stop()
-        # loop.close()
+    # TODO process some more exceptions
+    # exception = context.get("exception")
+    # if isinstance(exception, ZeroDivisionError):
+    #     mprint(context)
+    #     loop.stop()
+    #     # loop.close()
 
 
 def execute_modules(
