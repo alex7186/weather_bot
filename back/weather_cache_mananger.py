@@ -3,6 +3,9 @@ import pickle, json, ssl, requests
 from typing import NamedTuple
 from enum import Enum
 from urllib.error import URLError
+from urllib3.exceptions import ReadTimeoutError
+from requests.exceptions import ConnectTimeout, ReadTimeout
+
 from datetime import datetime, timedelta
 from typing import Any
 
@@ -61,13 +64,19 @@ def get_weather(coordinates: Coordinates, CONFIG: dict) -> tuple[Weather, SunPer
     def get_openweather_responce(
         latitude: float, longitude: float, OPENWEATHER_URL: str
     ) -> str:
-        ssl.create_default_context = ssl._create_unverified_context
-        url = OPENWEATHER_URL.format(latitude=latitude, longitude=longitude)
 
         try:
+            ssl.create_default_context = ssl._create_unverified_context
+            url = OPENWEATHER_URL.format(latitude=latitude, longitude=longitude)
+
             return requests.get(url, timeout=4)
 
-        except (URLError, requests.exceptions.ConnectTimeout):
+        except (
+            URLError,
+            ReadTimeoutError,
+            ConnectTimeout,
+            ReadTimeout,
+        ):
             raise ApiServiceError
 
     def get_weather_data(api_key: str) -> tuple[Weather, SunPeriods]:
