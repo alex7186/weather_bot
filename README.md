@@ -17,7 +17,7 @@ This script updates your Raspberry Pi OS !!! If you don't want to update the OS 
 
 ---
 
-# Setting configuration
+## Setting configuration
 to insert telegram bot key:
 
 1) go to file <br>
@@ -32,7 +32,7 @@ to insert telegram bot key:
     `"LINES_COUNT" : <YOUR_SCREEN_LINES_COUNT>,`<br>
     `"LINE_LENGTH" : <YOUR_SCREEN_LINE_LENGTH - 1>,`
 
-# Setup
+## Setup
 
 
 after the following commands, this script will install the necessary libraries for working with the I2C interface and for interacting with the Internet
@@ -52,7 +52,7 @@ run following commands to put the systemd service to the right place, make syste
     cd <PATH_TO_PROJECT_DIR>
     make setup
 
-# More about screen modules
+## More about screen modules
 each module is in its own folder inside the modules directory and has a main.py file.
 
 inside main.py, each module contains class with method: <br>
@@ -64,8 +64,8 @@ each module is entered into a 'config.json' file in the 'modules_data' section a
 * `refrash_skip_rate` - a number indicating how many screen refresh units (by default "GLOBAL_REFRESH_RATE" : 1) the module method `generate_screen_text` will be executed
 * `rows`, `columns_start`, `columns_stop` - locates the module screen area (ScreenPatch)
 
-# Screen modules example
-## `dawn_time_dusk` module
+## Screen modules example
+### `dawn_time_dusk` module
 this module is three lines by 9 characters. displays sunrise, sunset and current time data
 ```
 ╭――――――――――――――――――――╮
@@ -76,7 +76,7 @@ this module is three lines by 9 characters. displays sunrise, sunset and current
 ╰――――――――――――――――――――╯
 ```
 
-## `weather_block` module
+### `weather_block` module
 this module is three lines by 9 characters. data of the current date, temperature, type of weather, day of the week are displayed
 ```
 ╭――――――――――――――――――――╮
@@ -89,15 +89,15 @@ this module is three lines by 9 characters. data of the current date, temperatur
 
 * Emoji characters from the screen test cases are displayed as `CustomCharacters` (5x8 pixels)
 
-# Thanks to / Credits
+## Thanks to / Credits
 
 * [script for python3.10 simple installation](https://github.com/tvdsluijs/sh-python-installer)
 
-# License & Copyrights
+## License & Copyrights
 
 Copyright (c) 2022 [itheo.tech](https://itheo.tech/) / Theo van der Sluijs
 
-# MIT License
+## MIT License
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

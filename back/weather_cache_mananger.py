@@ -4,7 +4,7 @@ from typing import NamedTuple
 from enum import Enum
 from urllib.error import URLError
 from urllib3.exceptions import ReadTimeoutError
-from requests.exceptions import ConnectTimeout, ReadTimeout
+from requests.exceptions import ConnectTimeout, ReadTimeout, ConnectionError
 
 from datetime import datetime, timedelta
 from typing import Any
@@ -76,6 +76,7 @@ def get_weather(coordinates: Coordinates, CONFIG: dict) -> tuple[Weather, SunPer
             ReadTimeoutError,
             ConnectTimeout,
             ReadTimeout,
+            ConnectionError,
         ):
             raise ApiServiceError
 

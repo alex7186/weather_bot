@@ -1,21 +1,20 @@
 from smbus import SMBus
 from RPi.GPIO import RPI_REVISION
 from time import sleep
-from re import findall, match, search
+from re import match, search
 from subprocess import check_output
 from os.path import exists
 
-
 from back.i2c_byte_codes import *
-
-
-class I2CDeviceError(Exception):
-    pass
 
 
 # old and new versions of the RPi have swapped the two i2c buses
 # they can be identified by RPI_REVISION (or check sysfs)
 BUS_NUMBER = 0 if RPI_REVISION == 1 else 1
+
+
+class I2CDeviceError(Exception):
+    pass
 
 
 class I2CDevice:
@@ -107,9 +106,9 @@ class Lcd:
             # Process the string
             while string:
                 # Trying to find pattern {0xFF} representing a symbol
-                result = match(r"\{0[xX][0-9a-fA-F]{2}\}", string)
-                if result:
-                    self.lcd_write(int(result.group(0)[1:-1], 16), Rs)
+                has_custom_charecter = match(r"\{0[xX][0-9a-fA-F]{2}\}", string)
+                if has_custom_charecter:
+                    self.lcd_write(int(has_custom_charecter.group(0)[1:-1], 16), Rs)
                     string = string[6:]
                 else:
                     self.lcd_write(ord(string[0]), Rs)
