@@ -10,12 +10,11 @@ output to the display is carried out using libraries for interaction with i2C
 
 the program itself is launched using the user's systemd service
 
----
+
 **NOTE**
 
 This script updates your Raspberry Pi OS !!! If you don't want to update the OS DO NOT USE THIS SCRIPT!
 
----
 
 ## Setting configuration
 to insert telegram bot key:
@@ -37,7 +36,7 @@ to insert telegram bot key:
 
 after the following commands, this script will install the necessary libraries for working with the I2C interface and for interacting with the Internet
 
----
+
 
 you need to connect your [display with i2c adapter](https://aliexpress.ru/item/1005001853905593.html?spm=a2g2w.productlist.search_results.1.13db1172pTCxgm&sku_id=12000017862865136) to RPi:
 * display `SDA` -> GPIO 2
