@@ -119,7 +119,7 @@ def get_weather(coordinates: Coordinates, CONFIG: dict) -> tuple[Weather, SunPer
         return result
 
     else:
-        if current_time - cached_time > timedelta(hours=3):
+        if current_time - cached_time > timedelta(hours=5):
             try:
                 result = get_weather_data(CONFIG["OPENWEATHER_API_KEY"])
                 update_cache(result)
