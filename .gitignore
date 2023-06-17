@@ -6,4 +6,4 @@ __pycache__
 temp
 token.txt
 logfile.txt
-weather_cache.txt
+weather_data.cache

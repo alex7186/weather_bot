@@ -4,7 +4,8 @@
     "LINES_COUNT" : 4,
     "LINE_LENGTH" : 19,
 
-    "GLOBAL_REFRESH_RATE" : 1,
+    "GLOBAL_REFRESH_RATE_SECONDS" : 1,
+    "CACHE_UPDATE_PERIOD_HOURS" : 5,
     "PRINT_SCREEN_IMAGE_TO_CONSOLE" : false,
 
     "modules_data": [

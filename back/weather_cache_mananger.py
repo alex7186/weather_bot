@@ -46,14 +46,14 @@ def get_weather(coordinates: Coordinates, CONFIG: dict) -> tuple[Weather, SunPer
     """Requests weather in OpenWeather Api and returns it"""
 
     def update_cache(data: tuple[datetime, tuple[Weather, SunPeriods]]) -> None:
-        with open("misc/weather_cache.txt", "wb") as file:
+        with open("misc/weather_data.cache", "wb") as file:
             current_time = datetime.now()
             pickle.dump((current_time, data), file)
             mprint("weather_cache : Кеш-файл обновлен")
 
     def read_cache(api_key: str) -> tuple[datetime, tuple[Weather, SunPeriods]]:
         try:
-            with open("misc/weather_cache.txt", "rb") as file:
+            with open("misc/weather_data.cache", "rb") as file:
                 data = pickle.load(file)
                 return data
         except (FileNotFoundError, PermissionError):
@@ -61,15 +61,20 @@ def get_weather(coordinates: Coordinates, CONFIG: dict) -> tuple[Weather, SunPer
 
             return update_cache(get_weather_data(api_key))
 
-    def get_openweather_responce(
-        latitude: float, longitude: float, OPENWEATHER_URL: str
-    ) -> str:
+    def get_weather_data(api_key: str) -> tuple[Weather, SunPeriods]:
+
+        OPENWEATHER_URL = (
+            "https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}"
+            + f"&units=metric&appid={api_key}&exclude=daily"
+        )
 
         try:
             ssl.create_default_context = ssl._create_unverified_context
-            url = OPENWEATHER_URL.format(latitude=latitude, longitude=longitude)
+            url = OPENWEATHER_URL.format(
+                latitude=coordinates.latitude, longitude=coordinates.longitude
+            )
 
-            return requests.get(url, timeout=4)
+            openweather_responce = requests.get(url, timeout=4)
 
         except (
             URLError,
@@ -80,20 +85,7 @@ def get_weather(coordinates: Coordinates, CONFIG: dict) -> tuple[Weather, SunPer
         ):
             raise ApiServiceError
 
-    def get_weather_data(api_key: str) -> tuple[Weather, SunPeriods]:
-
-        OPENWEATHER_URL = (
-            "https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}"
-            + f"&units=metric&appid={api_key}&exclude=daily"
-        )
-
-        openweather_responce = get_openweather_responce(
-            latitude=coordinates.latitude,
-            longitude=coordinates.longitude,
-            OPENWEATHER_URL=OPENWEATHER_URL,
-        )
-
-        data = _parse_openweather_responce(openweather_responce)
+        data = parse_openweather_responce(openweather_responce)
 
         return (
             Weather(
@@ -119,7 +111,9 @@ def get_weather(coordinates: Coordinates, CONFIG: dict) -> tuple[Weather, SunPer
         return result
 
     else:
-        if current_time - cached_time > timedelta(hours=5):
+        if current_time - cached_time > timedelta(
+            hours=CONFIG["CACHE_UPDATE_PERIOD_HOURS"]
+        ):
             try:
                 result = get_weather_data(CONFIG["OPENWEATHER_API_KEY"])
                 update_cache(result)
@@ -135,14 +129,11 @@ def get_weather(coordinates: Coordinates, CONFIG: dict) -> tuple[Weather, SunPer
             return cached_data
 
 
-def _parse_openweather_responce(openweather_responce: str) -> dict[str, Any]:
-    def _parse_suntime(openweather_dict: dict, time) -> datetime:
-        return datetime.fromtimestamp(openweather_dict["sys"][time])
-
-    def _parse_temperature(openweather_dict: dict) -> Celsius:
+def parse_openweather_responce(openweather_responce: str) -> dict[str, Any]:
+    def parse_temperature(openweather_dict: dict) -> Celsius:
         return round(openweather_dict["main"]["temp"])
 
-    def _parse_weather_type(openweather_dict: dict) -> WeatherType:
+    def parse_weather_type(openweather_dict: dict) -> WeatherType:
         try:
             weather_type_id = str(openweather_dict["weather"][0]["id"])
 
@@ -166,16 +157,19 @@ def _parse_openweather_responce(openweather_responce: str) -> dict[str, Any]:
 
         raise ApiServiceError(f"illegal {weather_type_id=}")
 
+    def parse_suntime(openweather_dict: dict, time) -> datetime:
+        return datetime.fromtimestamp(openweather_dict["sys"][time])
+
     try:
         openweather_dict = json.loads(openweather_responce.text)
 
     except json.JSONDecodeError:
         raise ApiServiceError
 
-    temperature = _parse_temperature(openweather_dict)
-    weather_type = _parse_weather_type(openweather_dict)
-    sunset = _parse_suntime(openweather_dict, "sunset")
-    sunrise = _parse_suntime(openweather_dict, "sunrise")
+    temperature = parse_temperature(openweather_dict)
+    weather_type = parse_weather_type(openweather_dict)
+    sunset = parse_suntime(openweather_dict, "sunset")
+    sunrise = parse_suntime(openweather_dict, "sunrise")
 
     return {
         "temperature": temperature,

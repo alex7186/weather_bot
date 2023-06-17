@@ -84,7 +84,8 @@ def execute_screen(display, screen, modules_objects, screenpatch_collection):
             make_screenpatch_view(screen, screenpatch_collection, modules_objects)
 
         time.sleep(
-            CONFIG["GLOBAL_REFRESH_RATE"] - time.time() % CONFIG["GLOBAL_REFRESH_RATE"]
+            CONFIG["GLOBAL_REFRESH_RATE_SECONDS"]
+            - time.time() % CONFIG["GLOBAL_REFRESH_RATE_SECONDS"]
         )
 
 
